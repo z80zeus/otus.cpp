@@ -55,6 +55,6 @@ BOOST_AUTO_TEST_CASE(test_ips2stream) {
   std::vector<ipAddr> ips { ipAddr(1,2,3,4), ipAddr(5,6,7,8) };
   std::ostringstream os;
   BOOST_REQUIRE_NO_THROW(operator<<(os, ips));
-  BOOST_CHECK(os.str() == "1.2.3.4\n5.6.7.8");
+  BOOST_CHECK(os.str() == "1.2.3.4\n5.6.7.8\n");
 }
 }
