@@ -41,12 +41,14 @@ BOOST_AUTO_TEST_CASE(test_ip2stream) {
   }
 
 BOOST_AUTO_TEST_CASE(test_stream2ips) {
-    std::istringstream is("");
+    std::istringstream emptyInputString("");
     std::vector<ipAddr> ips;
-    BOOST_REQUIRE_THROW(operator>>(is,ips), std::invalid_argument);
+    BOOST_REQUIRE_NO_THROW(operator>>(emptyInputString,ips));
+    BOOST_CHECK(ips.empty());
 
-    is.str("1.2.3.4\tbla-bla-bla\b5.6.7.8\tтырыпыры");
+    std::istringstream is ("1.2.3.4\t bla-bla-bla\n5.6.7.8\t тырыпыры");
     BOOST_REQUIRE_NO_THROW(operator>>(is,ips));
+    std::cout << ips.size() << std::endl;
     BOOST_CHECK(ips[0] == ipAddr(1,2,3,4));
     BOOST_CHECK(ips[1] == ipAddr(5,6,7,8));
   }

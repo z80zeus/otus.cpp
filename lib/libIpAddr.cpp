@@ -85,7 +85,7 @@ operator==(const ipAddr &left, const ipAddr &right) noexcept {
 istream&
 operator>>(istream &is, vector<ipAddr> &ips) noexcept(false) {
   string buffer;
-  while (getline(is, buffer, '\t')) {
+  while (getline(is, buffer, '\t')){
     ips.push_back(string2ip(buffer));
     is.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
   }
