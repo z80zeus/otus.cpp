@@ -5,7 +5,6 @@
 #include <algorithm>
 #include <stdexcept>
 #include <limits>
-#include <string_view>
 
 #include "libIpAddr.h"
 
@@ -28,11 +27,11 @@ ipAddr::ipAddr(uint8_t byte1, uint8_t byte2, uint8_t byte3, uint8_t byte4) {
  * @throw При выходе значения за пределы байта - выбрасывает исключение std::invalid_argument.
  */
 uint8_t
-string2octet(const std::string_view& buffer) noexcept(false) {
-  long octet = stol(buffer.data());
+string2octet(const string& buffer) noexcept(false) {
+  long octet = stol(buffer);
 
   if (octet < std::numeric_limits<uint8_t>::min() || octet > std::numeric_limits<uint8_t>::max())
-    throw invalid_argument(string("Bad IP: ") + buffer.data());
+    throw invalid_argument(string("Bad IP: ") + buffer);
 
   return octet;
 }
