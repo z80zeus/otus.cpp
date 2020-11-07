@@ -17,9 +17,37 @@ constexpr int bytesInAddr = 4;
  * @struct
  */
 struct ipAddr {
+  /**
+   * @brief Конструктор инициализирует ipAddr четырьмя октетами.
+   * @param byte1 Первый октет ip-адреса byte1.*.*.*
+   * @param byte2 Второй октет ip-адреса *.byte2.*.*
+   * @param byte3 Третий октет ip-адреса *.*.byte3.*
+   * @param byte4 Четвёртый октет ip-адреса *.*.*.byte4
+   */
+  ipAddr(uint8_t byte1, uint8_t byte2, uint8_t byte3, uint8_t byte4);
+  ipAddr() = default;
+
   uint32_t addr = 0;                /** Числовое представление адреса. Для более эффективного оператора сравнения. */
   uint8_t bytes[bytesInAddr] = {0}; /** По-байтовое представление адреса. */
 };
+
+/**
+ * @brief Оператор сравенения IP-адресов на больше.
+ * @param left Левый операнд.
+ * @param right Правый операнд.
+ * @return Возаращет true тогда и только тогда, когда левый операнд строго больше правого.
+ * В противном случае - возвращает false.
+ */
+bool operator>(const ipAddr &left, const ipAddr &right) noexcept;
+
+/**
+ * @brief Оператор сравенения IP-адресов на равенство.
+ * @param left Левый операнд.
+ * @param right Правый операнд.
+ * @return Возаращет true тогда и только тогда, когда левый операнд равен правому.
+ * В противном случае - возвращает false.
+ */
+bool operator==(const ipAddr &left, const ipAddr &right) noexcept;
 
 /**
  * @brief Преобразование строкового представления адреса в структуру ipAddr.
@@ -36,7 +64,7 @@ ipAddr string2ip(const std::string &buffer) noexcept(false);
  * @return Как положено потоковым операторам - возвращает поток, для которого был вызван.
  * @throw Сам исключения не бросает, но не перехватывает исключения нижележащего кода.
  */
-std::ostream &operator<<(std::ostream &os, const ipAddr &ip) noexcept(false);
+std::ostream& operator<<(std::ostream &os, const ipAddr &ip) noexcept(false);
 
 /**
  * @brief Оператор ввода массива IP-адресов из потока. По одному IP-адресу из строки. Остаток строки - игнорируется!
@@ -55,12 +83,3 @@ std::istream &operator>>(std::istream &is, std::vector<ipAddr> &ips) noexcept(fa
  * @throw Сам исключения не бросает, но не перехватывает исключения нижележащего кода.
  */
 std::ostream &operator<<(std::ostream &os, const std::vector<ipAddr> &ips) noexcept(false);
-
-/**
- * @brief Оператор сравенения IP-адресов.
- * @param left Левый операнд.
- * @param right Правый операнд.
- * @return Возаращет true тогда и только тогда, когда левый операнд строго больше правого.
- * В противном случае - возвращает false.
- */
-bool operator>(const ipAddr &left, const ipAddr &right) noexcept;
