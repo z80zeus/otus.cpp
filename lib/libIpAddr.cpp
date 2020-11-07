@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <stdexcept>
 #include <limits>
+#include <string_view>
 
 #include "libIpAddr.h"
 
