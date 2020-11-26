@@ -1,24 +1,21 @@
 cmake_minimum_required(VERSION 3.2)
 
-project(ip_filter VERSION 0.0.$ENV{TRAVIS_BUILD_NUMBER})
+project(allocator VERSION 0.0.$ENV{TRAVIS_BUILD_NUMBER})
 
 find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 
 configure_file(lib/version.h.in version.h)
 
-add_library(libversion lib/libversion.cpp)
-add_library(libIpAddr lib/libIpAddr.cpp)
+add_library(libversion lib/libversion.cpp lib/allocator.h lib/container.h)
 
-add_executable(ip_filter main.cpp)
+add_executable(allocator main.cpp)
 add_executable(test_libversion test/test_libversion.cpp)
-add_executable(test_libIpAddr test/test_libIpAddr.cpp)
+add_executable(test_allocator test/test_allocator.cpp)
 
-set_target_properties(ip_filter libversion libIpAddr test_libversion test_libIpAddr PROPERTIES
-    CXX_STANDARD 17
-    CXX_STANDARD_REQUIRED ON
-)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-target_include_directories(ip_filter
+target_include_directories(allocator
     PRIVATE "${CMAKE_BINARY_DIR}"
 )
 
@@ -26,23 +23,18 @@ target_include_directories(libversion
     PRIVATE "${CMAKE_BINARY_DIR}"
 )
 
-target_include_directories(libIpAddr
-   PRIVATE "${CMAKE_BINARY_DIR}"
-)
-
 set_target_properties(test_libversion PROPERTIES
     COMPILE_DEFINITIONS BOOST_TEST_DYN_LINK
     INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR}
 )
 
-set_target_properties(test_libIpAddr PROPERTIES
+set_target_properties(test_allocator PROPERTIES
     COMPILE_DEFINITIONS BOOST_TEST_DYN_LINK
     INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR}
 )
 
-target_link_libraries(ip_filter PRIVATE
+target_link_libraries(allocator PRIVATE
     libversion
-    libIpAddr
 )
 
 target_link_libraries(test_libversion
@@ -50,46 +42,40 @@ target_link_libraries(test_libversion
     libversion
 )
 
-target_link_libraries(test_libIpAddr
+target_link_libraries(test_allocator
     ${Boost_LIBRARIES}
-    libIpAddr
 )
 
+
 if (MSVC)
-    target_compile_options(ip_filter PRIVATE
+    target_compile_options(allocator PRIVATE
         /W4
     )
     target_compile_options(libversion PRIVATE
         /W4
     )
-    target_compile_options(libIpAddr PRIVATE
-        /W4
-    )
     target_compile_options(test_libversion PRIVATE
         /W4
     )
-    target_compile_options(test_libIpAddr PRIVATE
+    target_compile_options(test_allocator PRIVATE
         /W4
     )
 else ()
-    target_compile_options(ip_filter PRIVATE
+    target_compile_options(allocator PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
     target_compile_options(libversion PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
-    target_compile_options(libIpAddr PRIVATE
-        -Wall -Wextra -pedantic -Werror
-    )
     target_compile_options(test_libversion PRIVATE
         -Wall -Wextra -pedantic -Werror
     )
-    target_compile_options(test_libIpAddr PRIVATE
+    target_compile_options(test_allocator PRIVATE
         -Wall -Wextra -pedantic -Werror
-   )
+    )
 endif()
 
-install(TARGETS ip_filter RUNTIME DESTINATION bin)
+install(TARGETS allocator RUNTIME DESTINATION bin)
 
 set(CPACK_GENERATOR DEB)
 
@@ -105,4 +91,4 @@ set(CMAKE_BUILD_TYPE Debug)
 
 enable_testing()
 add_test(test_version test_libversion)
-add_test(test_ipAddr test_libIpAddr)
+add_test(test_allocator test_allocator)
