@@ -10,7 +10,7 @@
 
 #include "../lib/allocator.h"
 
-BOOST_AUTO_TEST_SUITE(not_extended_allocator)
+BOOST_AUTO_TEST_SUITE(not_extendable_allocator)
 
   constexpr auto extendable = false;
 
@@ -81,6 +81,16 @@ BOOST_AUTO_TEST_SUITE(not_extended_allocator)
     auto iter = std::cbegin(lst);
     for (size_t i = 0; i < N; ++i, ++iter)
       BOOST_CHECK(*iter == i);
+
+    auto anotherLst = lst;
+    iter = std::cbegin(anotherLst);
+    for (size_t i = 0; i < N; ++i, ++iter)
+      BOOST_CHECK(*iter == i);
+
+    for (auto iter1 = std::cbegin(lst), iter2 = std::cbegin(anotherLst);
+          iter1 != std::cend(lst) && iter2 != std::cend(anotherLst);
+          ++iter1, ++iter2)
+      BOOST_CHECK(&(*iter1) != &(*iter2));
   }
 
   BOOST_AUTO_TEST_CASE(map) {
@@ -93,6 +103,15 @@ BOOST_AUTO_TEST_SUITE(not_extended_allocator)
 
     for (size_t i = 0; i < N; ++i)
       BOOST_CHECK(mapa[i] == i);
+
+    auto anotherMap = mapa;
+    for (size_t i = 0; i < N; ++i)
+      BOOST_CHECK(anotherMap[i] == i);
+
+    for (auto iter1 = std::cbegin(mapa), iter2 = std::cbegin(anotherMap);
+          iter1 != std::cend(mapa) && iter2 != std::cend(anotherMap);
+          ++iter1, ++iter2)
+      BOOST_CHECK(&(*iter1) != &(*iter2));
   }
 
   BOOST_AUTO_TEST_CASE(vector) {
@@ -107,12 +126,21 @@ BOOST_AUTO_TEST_SUITE(not_extended_allocator)
 
     for (size_t i = 0; i < N; ++i)
       BOOST_CHECK(vec[i] == i);
+
+    auto anotherVec = vec;
+    for (size_t i = 0; i < N; ++i)
+      BOOST_CHECK(anotherVec[i] == i);
+
+    for (auto iter1 = std::cbegin(vec), iter2 = std::cbegin(anotherVec);
+         iter1 != std::cend(vec) && iter2 != std::cend(anotherVec);
+         ++iter1, ++iter2)
+      BOOST_CHECK(&(*iter1) != &(*iter2));
   }
 
 BOOST_AUTO_TEST_SUITE_END()
 
 
-BOOST_AUTO_TEST_SUITE(extended_allocator)
+BOOST_AUTO_TEST_SUITE(extendable_allocator)
 
   constexpr auto extendable = true;
 
@@ -179,6 +207,16 @@ BOOST_AUTO_TEST_SUITE(extended_allocator)
     auto iter = std::cbegin(lst);
     for (size_t i = 0; i < N; ++i, ++iter)
       BOOST_CHECK(*iter == i);
+
+    auto anotherLst = lst;
+    iter = std::cbegin(anotherLst);
+    for (size_t i = 0; i < N; ++i, ++iter)
+      BOOST_CHECK(*iter == i);
+
+    for (auto iter1 = std::cbegin(lst), iter2 = std::cbegin(anotherLst);
+         iter1 != std::cend(lst) && iter2 != std::cend(anotherLst);
+         ++iter1, ++iter2)
+      BOOST_CHECK(&(*iter1) != &(*iter2));
   }
 
   BOOST_AUTO_TEST_CASE(map) {
@@ -192,6 +230,15 @@ BOOST_AUTO_TEST_SUITE(extended_allocator)
 
     for (size_t i = 0; i < N; ++i)
       BOOST_CHECK(mapa[i] == i);
+
+    auto anotherMap = mapa;
+    for (size_t i = 0; i < N; ++i)
+      BOOST_CHECK(anotherMap[i] == i);
+
+    for (auto iter1 = std::cbegin(mapa), iter2 = std::cbegin(anotherMap);
+         iter1 != std::cend(mapa) && iter2 != std::cend(anotherMap);
+         ++iter1, ++iter2)
+      BOOST_CHECK(&(*iter1) != &(*iter2));
   }
 
   BOOST_AUTO_TEST_CASE(vector) {
@@ -207,6 +254,15 @@ BOOST_AUTO_TEST_SUITE(extended_allocator)
 
     for (size_t i = 0; i < N; ++i)
       BOOST_CHECK(vec[i] == i);
+
+    auto anotherVec = vec;
+    for (size_t i = 0; i < N; ++i)
+      BOOST_CHECK(anotherVec[i] == i);
+
+    for (auto iter1 = std::cbegin(vec), iter2 = std::cbegin(anotherVec);
+         iter1 != std::cend(vec) && iter2 != std::cend(anotherVec);
+         ++iter1, ++iter2)
+      BOOST_CHECK(&(*iter1) != &(*iter2));
   }
 
 BOOST_AUTO_TEST_SUITE_END()
