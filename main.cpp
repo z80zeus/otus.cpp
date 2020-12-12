@@ -19,46 +19,44 @@
 
 #include <iostream>
 #include <map>
-#include <functional>
 #include <boost/math/special_functions/factorials.hpp>
+
 #include "lib/allocator.h"
+#include "lib/container.h"
 
 using namespace std;
 
 constexpr auto numbers = 10;
 
-using dataType = uint64_t;
+const auto factorial = &boost::math::factorial<float>;
+using stdContainer_stdAllocator = map<int, int>;
+using stdContainer_z80Allocator = map<int, int, std::less<>, z80::allocator<std::pair < int, int>, numbers, false>>;
+using z80Container_stdAllocator = z80::container<int>;
+using z80Container_z80Allocator = z80::container<long, z80::allocator<long>>; // long, потому что аллокатор требует раззмер элемента не меньше указателя
 
-int main(/*int argc, char const *argv[]*/) {
+int main() {
 
-  map<dataType, dataType, std::less<>, z80::allocator<std::pair<dataType, dataType>>> map1;
-  for (auto i = 0; i < numbers; i++)
-    map1[i] = static_cast<dataType>(boost::math::factorial<float>(i));
+    stdContainer_stdAllocator c1;
+    for (auto i = 0; i < numbers; i++)
+        c1[i] = static_cast<int>(factorial(i));
 
-  cout << "map1: ";
-  for (const auto& pair: map1) cout << pair.first << ":" << pair.second << " ";
-  cout << endl;
+    stdContainer_z80Allocator c2;
+    for (auto i = 0; i < numbers; i++)
+        c2[i] = static_cast<int>(factorial(i));
 
-  auto map2 = map1;
-  cout << "map2: ";
-  for (const auto& pair: map2) cout << pair.first << ":" << pair.second << " ";
-  cout << endl;
+    for (const auto &pair: c2)
+        cout << pair.first << " " << pair.second << " " << endl;
 
+    z80Container_stdAllocator c3;
+    for (auto i = 0; i < numbers; ++i)
+        c3.push_back(i);
 
-  vector<dataType, z80::allocator<dataType, 10>> vec1;
-  for (auto i = 0; i < numbers; i++)
-    vec1.push_back(static_cast<dataType>(boost::math::factorial<float>(i)));
+    z80Container_z80Allocator c4;
+    for (auto i = 0; i < numbers; ++i)
+        c4.push_back(i);
 
-  cout << "vec1: ";
-  for (const auto& num: vec1) cout << num << " ";
-  cout << endl;
+    for (auto i = 0; i < numbers; ++i)
+        cout << c4[i] << endl;
 
-  auto vec2 = vec1;
-  vec2.push_back(42);
-  cout << "vec2: ";
-  for (const auto& num: vec2) cout << num << " ";
-  cout << endl;
-
-  return 0;
+    return 0;
 }
-

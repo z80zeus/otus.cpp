@@ -145,6 +145,7 @@ BOOST_AUTO_TEST_SUITE(extendable_allocator)
   constexpr auto extendable = true;
 
   BOOST_AUTO_TEST_CASE(construct) {
+    BOOST_REQUIRE_NO_THROW((z80::allocator<long>()));
     BOOST_REQUIRE_NO_THROW((z80::allocator<long, 1, extendable>()));
     BOOST_REQUIRE_NO_THROW((z80::allocator<long, 10, extendable>()));
     BOOST_REQUIRE_NO_THROW((z80::allocator<long, 100, extendable>()));
