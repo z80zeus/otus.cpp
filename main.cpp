@@ -42,16 +42,16 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <list>
 
 #include "lib/ip2string.h"
 
 using std::vector;
+using std::list;
 using std::cout;
 using std::endl;
 
 int main() {
-    vector v = { 192, 168, 1, 1 };
-
     cout << z80::ip2string (static_cast<char>(-1)) << endl;
     cout << z80::ip2string (static_cast<short>(0)) << endl;
     cout << z80::ip2string (static_cast<int>(2130706433)) << endl;
@@ -59,7 +59,8 @@ int main() {
 
     cout << z80::ip2string (std::string("224.1.1.1")) << endl;
 
-    cout << z80::ip2string (v) << endl;
+    cout << z80::ip2string (vector{ 192, 168, 1, 1 }) << endl;
+    cout << z80::ip2string (list{ 192, 168, 1, 2 }) << endl;
 
     return 0;
 }

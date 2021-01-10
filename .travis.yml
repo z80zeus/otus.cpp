@@ -2,16 +2,23 @@ dist: focal
 language: cpp
 before_script:
 - sudo apt-get install libboost-test-dev -y
+- sudo apt-get install doxygen
+- sudo apt install graphviz
 - echo "deb http://archive.ubuntu.com/ubuntu xenial main universe" | sudo tee -a /etc/apt/sources.list
 - sudo apt-get update -qq
 script:
 - cmake .
 - cmake --build .
 - cmake --build . --target test
+- cmake --build . --target doc
 - cmake --build . --target package
 deploy:
-  provider: script
+  provider: pages
   skip_cleanup: true
+  local_dir: doc/html
+  github_token: $GITHUB_TOKEN
+  keep_history: true
+  target_branch: gh-pages
   script:
   - curl -T sfinae-0.0.$TRAVIS_BUILD_NUMBER-Linux.deb -uz80zeus:$BINTRAY_API_KEY "https://api.bintray.com/content/z80zeus/otus.cpp/sfinae/$TRAVIS_BUILD_NUMBER/sfinae-0.0.$TRAVIS_BUILD_NUMBER-Linux.deb;deb_distribution=trusty;deb_component=main;deb_architecture=amd64;publish=1"
   on:
