@@ -19,6 +19,6 @@ deploy:
   keep_history: true
   target_branch: z80zeus.github.io
   script:
-  - curl -T sfinae-0.0.$TRAVIS_BUILD_NUMBER-Linux.deb -uz80zeus:$BINTRAY_API_KEY "https://api.bintray.com/content/z80zeus/otus.cpp/sfinae/$TRAVIS_BUILD_NUMBER/sfinae-0.0.$TRAVIS_BUILD_NUMBER-Linux.deb;deb_distribution=trusty;deb_component=main;deb_architecture=amd64;publish=1"
+  - curl -T sfinae-0.0.$TRAVIS_BUILD_NUMBER-Linux.deb -uz80zeus:$BINTRAY_API_KEY "https://api.bintray.com/content/z80zeus/otus.cpp/SFINAE/$TRAVIS_BUILD_NUMBER/sfinae-0.0.$TRAVIS_BUILD_NUMBER-Linux.deb;deb_distribution=trusty;deb_component=main;deb_architecture=amd64;publish=1"
   on:
-    branch: sfinae
+    branch: SFINAE
