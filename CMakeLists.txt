@@ -43,7 +43,7 @@ set(DOXYGEN_PROJECT_BRIEF print_ip)
 set(DOXYGEN_HAVE_DOT YES)
 set(DOXYGEN_EXTRACT_ALL YES)
 set(DOXYGEN_OUTPUT_DIRECTORY docs)
-doxygen_add_docs(doxygen lib ALL)
+doxygen_add_docs(doxygen lib DEFAULT)
 
 
 # compiler specific options
