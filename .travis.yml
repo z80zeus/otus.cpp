@@ -22,7 +22,7 @@ deploy:
       branch: SFINAE
   - provider: pages
     skip_cleanup: true
-    local_dir: doc/html
+    local_dir: docs/html
     github_token: $GITHUB_TOKEN
     keep_history: true
     target_branch: z80zeus.github.io
