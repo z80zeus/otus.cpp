@@ -11,6 +11,9 @@ script:
 - cmake --build .
 - cmake --build . --target test
 - cmake --build . --target package
+- ls .
+- ls doc
+- ls doc/html
 deploy:
   - provider: script
     skip_cleanup: true
