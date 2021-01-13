@@ -7,13 +7,11 @@ before_script:
 - echo "deb http://archive.ubuntu.com/ubuntu xenial main universe" | sudo tee -a /etc/apt/sources.list
 - sudo apt-get update -qq
 script:
+- pwd
 - cmake .
 - cmake --build .
 - cmake --build . --target test
 - cmake --build . --target package
-- ls /home/travis/build/z80zeus/otus.cpp/
-- ls /home/travis/build/z80zeus/otus.cpp/doc/
-- ls /home/travis/build/z80zeus/otus.cpp/doc/html/
 deploy:
   - provider: script
     skip_cleanup: true
