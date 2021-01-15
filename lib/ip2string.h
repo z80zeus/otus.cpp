@@ -70,75 +70,24 @@ namespace z80 {
     return ip;
   }
 
-  /**
-   * @brief Метафункция проверяет наличие в типе T подтипа - константный итератор.
-   * @tparam T Тип, который следует проверить.
-   * @return has_const_iterator::value = true, если тип T содержит требуемый подтип. false - в противном случае.
-   */
-  template<typename T>
-  struct has_const_iterator {
-    using yes = char[1];
-    using no = char[2];
 
-    template<typename C>
-    static yes &
-    test(typename C::const_iterator *);
-
-    template<typename C>
-    static no &
-    test(...);
-
-    static const bool value = sizeof(test<T>(nullptr)) == sizeof(yes);
-  };
-
-  /**
-   * @brief Метафункция проверяет отсутствие в типе T функции c_str.
-   * @tparam T Тип, который следует проверить.
-   * @return has_no_c_str = true, если тип Т НЕ содержит функцию c_str. false - в противном случае.
-   */
-  template<typename T>
-  struct has_no_c_str {
-    using yes = char[1];
-    using no = char[2];
-
-    template<typename U>
-    static no &
-    test(decltype(&U::c_str));
-
-
-    template<typename U>
-    static yes &
-    test(...);
-
-    static constexpr bool value = sizeof(test<T>(0)) == sizeof(yes);
-  };
-
-  /**
-   * @brief Преобразование представления IP-адреса из содержимового контейнера - в строку.
+   /**
+   * @brief Преобразование представления IP-адреса из содержимового контейнера (std::vector или std::list) - в строку.
    * @tparam T Тип - контейнер.
-   * @param ip константная ссылка на объект типа T.
-   * @return Для T типа контейнер - возвращает строку, составленную из содержимого контейнера, разделённого точками.
-   * Для типа T не предоставляющего необходимый интерфейс контейнера - данный вариант функции не скомпилируется.
-   * @details Для работы функции требуется наличие константного итератора - это проверяется метафункцией
-   * z80::has_const_iterator<T>.\n
-   * Однако под данный критерий попадает и std::string, который имеет интерфейс практически идентичный контейнерам, но
-   * std::string должен обрабатываться другим вариантом этой функции.\n
-   * Для исключения применения данного варианта функции, std::string отбрасывается метафункцией z80::has_no_c_str<T>,
-   * которая не должна обнаружить наличие метода c_str у типа T: в std::string этот метод есть, у контейнеров - нет.\n
-   * Результаты работы этих двух метафункций: z80::has_const_iterator<T> и z80::has_no_c_str<T> - собираются по "И"
-   * метафункцией std::conjunction.
+   * @tparam C Шаблонный параметр шаблона - контейнер.
+   * @param ip константная ссылка на объект типа C<T>.
+   * @return Для C<T> типа std::vector или std::list - функция возвращает строку, составленную из содержимого контейнера,
+   * разделённого точками.
+   * В противном случае, данный вариант функции не скомпилируется.
    */
-  template<typename T>
+  template<typename T, template<typename> class C>
   std::enable_if_t
   <
-    std::conjunction_v
-    <
-      z80::has_const_iterator<T>,
-      z80::has_no_c_str<T>
-    >,
+    std::is_same_v<std::decay_t<C<T>>, std::vector<T>> ||
+    std::is_same_v<std::decay_t<C<T>>, std::list<T>>,
     std::string
   >
-  ip2string(const T &ip) {
+  ip2string(const C<T> &ip) {
 
     std::string rtn;
 
