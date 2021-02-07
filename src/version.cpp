@@ -1,5 +1,3 @@
-#include "libversion.h"
-
 #include <version.h>
 
 int version()
