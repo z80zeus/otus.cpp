@@ -25,9 +25,19 @@
  * 3. Избегать дублирования кода.
  */
 
+#include <boost/program_options.hpp>
+
 #include "src/application.h"
 
+using namespace boost::program_options;
+using namespace z80;
+
 int main(int argc, const char* argv[]) {
-    z80::application app;
-    return app.run();
+  options_description desc;
+  variables_map vm;
+  store(parse_command_line(argc, argv, desc), vm);
+  notify(vm);
+  application app;
+
+  return app.run();
 }
