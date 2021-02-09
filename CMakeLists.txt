@@ -15,15 +15,15 @@ add_library(version.o OBJECT src/version.h src/version.cpp)
 target_include_directories(version.o PRIVATE "${CMAKE_BINARY_DIR}")
 add_library(main.o OBJECT main.cpp)
 add_library(application.o OBJECT src/application.h src/application.cpp)
-add_library(command.o OBJECT src/command.h)
-add_library(document.o OBJECT src/document.h)
-add_library(drawable.o OBJECT src/drawable.h)
-add_library(event.o OBJECT src/event.h src/event.cpp)
-add_library(menu.o OBJECT src/menu.h src/menu.cpp)
-add_library(svgDataSource.o OBJECT src/svgDataSource.h src/svgDataSource.cpp)
-add_library(svgEntity.o OBJECT src/svgEntity.h)
-add_library(widget.o OBJECT src/widget.h src/widget.cpp)
-add_library(window.o OBJECT src/window.h src/window.cpp)
+#add_library(command.o OBJECT src/command.h)
+#add_library(document.o OBJECT src/document.h)
+#add_library(drawable.o OBJECT src/drawable.h)
+#add_library(event.o OBJECT src/event.h src/event.cpp)
+#add_library(menu.o OBJECT src/menu.h src/menu.cpp)
+#add_library(svgDataSource.o OBJECT src/svgDataSource.h src/svgDataSource.cpp)
+#add_library(svgEntity.o OBJECT src/svgEntity.h)
+#add_library(widget.o OBJECT src/widget.h src/widget.cpp)
+#add_library(window.o OBJECT src/window.h src/window.cpp)
 
 # objects
 #add_library(version.o OBJECT src/version.cpp src/version.h)
@@ -35,11 +35,11 @@ add_library(window.o OBJECT src/window.h src/window.cpp)
 #target_include_directories(widget.o PRIVATE "${CMAKE_BINARY_DIR}")
 
 # executable destination
-add_executable(svg.editor)
-#target_include_directories(svg.editor PRIVATE "${CMAKE_BINARY_DIR}")
-target_link_libraries(svg.editor PRIVATE version.o
-        main.o application.o command.o document.o drawable.o event.o menu.o menuItem.o svgDataSource.o
-        svgEntity.o widget.o window.o)
+add_executable(svg.editor version.o main.o application.o)
+target_include_directories(svg.editor PRIVATE "${CMAKE_BINARY_DIR}")
+#target_link_libraries(svg.editor PRIVATE version.o main.o application.o)
+#        command.o document.o drawable.o event.o menu.o menuItem.o svgDataSource.o
+#        svgEntity.o widget.o window.o)
 
 # tests
 ##find_package(Boost COMPONENTS unit_test_framework REQUIRED)
