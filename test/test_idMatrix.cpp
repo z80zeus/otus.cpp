@@ -1,6 +1,6 @@
 #define BOOST_TEST_MODULE idMatrix
 
-#include "../src/idMatrix.h"
+#include "../src/commandPublisher.h"
 
 #include <boost/test/unit_test.hpp>
 
