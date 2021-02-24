@@ -28,13 +28,13 @@
 
 #include <iostream>
 
-#include "commandPublisherStream.h"
+#include "publisherStream.h"
 
 using namespace std;
 using namespace z80;
 
 
 int main() {
-  commandPublisherStream commandSrc(cin);
+  publisherStream commandSrc(cin);
   return 0;
 }

@@ -13,16 +13,14 @@ configure_file(src/version.h.in version.h)
 add_library(libversion OBJECT src/version.cpp)
 target_include_directories(libversion PRIVATE "${PROJECT_BINARY_DIR}")
 
-add_library(commandSubscriber OBJECT src/commandSubscriber.h)
-add_library(commandPublisher OBJECT src/commandPublisher.cpp)
-add_library(commandPublisherStream OBJECT src/commandPublisherStream.cpp)
+add_library(publisherStream OBJECT src/publisherStream.cpp)
 add_library(stateIdle OBJECT src/stateIdle.cpp)
 add_library(stateStaticBlock OBJECT src/stateStaticBlock.cpp)
 add_library(stateDynamicBlock OBJECT src/stateDynamicBlock.cpp)
 
 add_executable(bulk main.cpp)
 target_include_directories(bulk PRIVATE "${PROJECT_SOURCE_DIR}/src")
-target_link_libraries(bulk libversion commandSubscriber commandPublisher commandPublisherStream
+target_link_libraries(bulk libversion publisherStream
         stateIdle stateStaticBlock stateDynamicBlock)
 
 ## Boost test
