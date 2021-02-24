@@ -1,26 +1,33 @@
 #pragma once
 
-#include <memory>
+#include <memory>  // std::unique_ptr
+#include <utility> // std::forward
 
 #include "state.h"
 
 namespace z80 {
+
+  template<typename inputActionType>
+  class state;
+
   template <typename inputActionType>
   class stateMachine {
-    using State = std::unique_ptr<z80::state<inputActionType>>;
+    using State = z80::state<inputActionType>;
 
     public:
 
-    void setState(State newState) {
-      currentState = newState;
+    void
+    setState(std::unique_ptr<State>&& newState) {
+      currentState = std::forward<std::unique_ptr<State>>(newState);
     };
 
-    void inputAction(const commandType& command) {
+    void
+    inputAction(inputActionType&& command) {
       if (currentState)
-        currentState->inputAction(command);
+        currentState->inputAction(std::forward<inputActionType>(command));
     };
 
     private:
-    State currentState;
+    std::unique_ptr<State> currentState;
   };
 }
