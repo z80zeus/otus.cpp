@@ -16,6 +16,11 @@ namespace z80 {
       public z80::subscriber<std::string>,
       public z80::publisher<std::string> {
     public:
-    void update(const std::string& command) override;
+    void update(const std::string& command) override; // z80::subscriber<std::string>
+    std::size_t getStaticBlockSize();
+    void        setStaticBlockSize(std::size_t blockSize);
+
+    private:
+    std::size_t staticBlockSize = 3;
   };
 }

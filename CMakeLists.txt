@@ -17,11 +17,13 @@ add_library(publisherStream OBJECT src/publisherStream.cpp)
 add_library(stateIdle OBJECT src/stateIdle.cpp)
 add_library(stateStaticBlock OBJECT src/stateStaticBlock.cpp)
 add_library(stateDynamicBlock OBJECT src/stateDynamicBlock.cpp)
+add_library(commandStateMachine OBJECT src/commandStateMachine.cpp)
 
 add_executable(bulk main.cpp)
 target_include_directories(bulk PRIVATE "${PROJECT_SOURCE_DIR}/src")
 target_link_libraries(bulk libversion publisherStream
-        stateIdle stateStaticBlock stateDynamicBlock)
+        stateIdle stateStaticBlock stateDynamicBlock
+        commandStateMachine)
 
 ## Boost test
 #find_package(Boost COMPONENTS unit_test_framework REQUIRED)

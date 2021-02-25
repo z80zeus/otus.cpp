@@ -31,9 +31,9 @@ namespace z80 {
     };
 
     void
-    inputAction(inputActionType&& command) {
+    inputAction(const inputActionType& command) {
       if (currentState)
-        currentState->inputAction(std::forward<inputActionType>(command));
+        currentState->inputAction(command);
     };
 
     private:

@@ -1,8 +1,9 @@
 #pragma once
 
-#include <memory>
-
 #include "state.h"
+#include "stateMachine.h"
+
+#include <memory> // std::shared_ptr
 
 namespace z80 {
   /**
@@ -13,7 +14,7 @@ namespace z80 {
     using StateMachine = z80::stateMachine<std::string>;
 
    public:
-    stateIdle(std::shared_ptr<StateMachine> stateMachine);
-    void inputAction(std::string&& iAction) override;
+    explicit stateIdle(const std::shared_ptr<StateMachine>& stateMachine);
+    void inputAction(const std::string& iAction) override;
   };
 }

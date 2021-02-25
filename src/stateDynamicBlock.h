@@ -1,9 +1,11 @@
 #pragma once
 
+#include "state.h"
+#include "stateMachine.h"
+#include "commandStateMachine.h"
+
 #include <string> // std::string
 #include <memory> // std::shared_ptr
-
-#include "state.h"
 
 namespace z80 {
   /**
@@ -13,10 +15,12 @@ namespace z80 {
     using StateMachine = z80::stateMachine<std::string>;
 
   public:
-    stateDynamicBlock(std::shared_ptr<StateMachine> stateMachine);
-    void inputAction(std::string&& iAction) override;
+    explicit stateDynamicBlock(const std::shared_ptr<StateMachine>& stateMachine);
+    ~stateDynamicBlock() noexcept override;
+    void inputAction(const std::string& iAction) override;
 
   private:
+    std::shared_ptr<commandStateMachine>  cStateMachine;
     std::string savedCommands;
   };
 }
