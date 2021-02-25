@@ -7,6 +7,9 @@
 #include "state.h"
 
 namespace z80 {
+  /**
+   * @brief Класс состояния "Обработка статического блока команд".
+   */
   class stateStaticBlock : public z80::state<std::string> {
     using StateMachine = z80::stateMachine<std::string>;
 

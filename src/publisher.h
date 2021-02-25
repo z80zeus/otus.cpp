@@ -7,6 +7,10 @@
 
 namespace z80 {
 
+  /**
+   * @brief Шаблон класса publisher. Обеспечивает функционал подписки-отписки-оповещения.
+   * @tparam T Тип, с которым работает класс.
+   */
   template<typename T>
   class publisher {
     using Subscriber = z80::subscriber<T>;
