@@ -9,7 +9,7 @@
 using namespace std;
 using namespace z80;
 
-stateIdle::stateIdle(const shared_ptr<StateMachine>& stateMachine):
+stateIdle::stateIdle(weak_ptr<stateMachine<basic_string<char>>> stateMachine):
 state<string>::state (stateMachine) {
   cout << "stateIdle: begin." << endl;
 }
@@ -18,12 +18,15 @@ void
 stateIdle::inputAction(const string& iAction) {
   if (iAction == "{") {
     cout << "stateIdle: switch to stateDynamicBlock..." << endl;
-    sm->setState(std::move(make_unique<stateDynamicBlock>(sm)));
+    auto csm = sm.lock();
+    if (csm) csm->setState(std::move(make_unique<stateDynamicBlock>(sm)));
     return;
   }
 
   if (iAction == "}") throw invalid_argument("Bad input");
 
   cout << "stateIdle: switch to stateStaticBlock..." << endl;
-  sm->setState(std::move(make_unique<stateStaticBlock>(sm, iAction)));
+  auto csm = sm.lock();
+  if (csm)
+    csm->setState(std::move(make_unique<stateStaticBlock>(sm, iAction)));
 }

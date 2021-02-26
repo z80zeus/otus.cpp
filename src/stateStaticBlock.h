@@ -15,7 +15,7 @@ namespace z80 {
     using StateMachine = z80::stateMachine<std::string>;
 
   public:
-    stateStaticBlock(const std::shared_ptr<StateMachine>& stateMachine, const std::string& iAction);
+    stateStaticBlock(const std::weak_ptr<StateMachine>& stateMachine, const std::string& iAction);
     ~stateStaticBlock() override;
 
     void inputAction(const std::string& iAction) override;
@@ -23,7 +23,7 @@ namespace z80 {
   private:
     void addInputAction (const std::string& iAction);
 
-    std::shared_ptr<commandStateMachine>  cStateMachine;
+    std::weak_ptr<commandStateMachine>  cStateMachine;
     std::string   savedCommands;
     std::size_t   commandsCount = 0;
     std::size_t   blockSize     = 3;

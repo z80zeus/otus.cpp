@@ -14,7 +14,7 @@ namespace z80 {
     using StateMachine = z80::stateMachine<std::string>;
 
    public:
-    explicit stateIdle(const std::shared_ptr<StateMachine>& stateMachine);
+    explicit stateIdle(std::weak_ptr<StateMachine> stateMachine);
     void inputAction(const std::string& iAction) override;
   };
 }

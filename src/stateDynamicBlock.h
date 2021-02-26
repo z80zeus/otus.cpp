@@ -15,12 +15,12 @@ namespace z80 {
     using StateMachine = z80::stateMachine<std::string>;
 
   public:
-    explicit stateDynamicBlock(const std::shared_ptr<StateMachine>& stateMachine);
+    explicit stateDynamicBlock(const std::weak_ptr<StateMachine>& stateMachine);
     ~stateDynamicBlock() noexcept override;
     void inputAction(const std::string& iAction) override;
 
   private:
-    std::shared_ptr<commandStateMachine>  cStateMachine;
+    std::weak_ptr<commandStateMachine>  cStateMachine;
     std::string savedCommands;
   };
 }

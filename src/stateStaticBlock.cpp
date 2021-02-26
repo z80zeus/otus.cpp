@@ -8,19 +8,20 @@
 using namespace std;
 using namespace z80;
 
-stateStaticBlock::stateStaticBlock(const shared_ptr<StateMachine>& stateMachine, const std::string& iAction):
+stateStaticBlock::stateStaticBlock(const weak_ptr<StateMachine>& stateMachine, const std::string& iAction):
 state<string>(stateMachine) {
   cout << "stateStaticBlock: begin." << endl;
-  cStateMachine = static_pointer_cast<commandStateMachine>(stateMachine);
-  if (!cStateMachine) throw bad_cast();
-  blockSize = cStateMachine->getStaticBlockSize();
+  cStateMachine = static_pointer_cast<commandStateMachine>(sm.lock());
+  if (!cStateMachine.lock()) throw bad_cast();
+  blockSize = cStateMachine.lock()->getStaticBlockSize();
   addInputAction(iAction);
 }
 
 stateStaticBlock::~stateStaticBlock() {
   if (commandsCount) {
     cout << "~stateStaticBlock: end. Commands = " << savedCommands << endl;
-    cStateMachine->notify(savedCommands);
+    auto csm = cStateMachine.lock();
+    if (csm) csm->notify(savedCommands);
   }
 }
 
@@ -37,10 +38,12 @@ stateStaticBlock::addInputAction(const string& iAction) {
   if (++commandsCount < blockSize) return;
 
   cout << "stateStaticBlock: end." << endl;
-  cStateMachine->notify(savedCommands);
+  auto csm = cStateMachine.lock();
+  if (csm) csm->notify(savedCommands);
 
   savedCommands = "";
   commandsCount = 0;
   cout << "stateStaticBlock: switch to stateIdle..." << endl;
-  cStateMachine->setState(make_unique<stateIdle>(sm));
+  auto ssm = sm.lock();
+  if (ssm) ssm->setState(make_unique<stateIdle>(sm));
 }

@@ -20,11 +20,11 @@ namespace z80 {
     using StateMachine = z80::stateMachine<inputActionType>;
 
     public:
-    explicit state(std::shared_ptr<StateMachine> stateMachine): sm(stateMachine) {};
+    explicit state(std::weak_ptr<StateMachine> stateMachine): sm(stateMachine) {};
     virtual ~state() { std::cout << "~state" << std::endl; };  // default;
     virtual void inputAction(const inputActionType& iAction) = 0;
 
   protected:
-    std::shared_ptr<StateMachine> sm;
+    std::weak_ptr<StateMachine> sm;
   };
 }
