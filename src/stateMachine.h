@@ -1,9 +1,11 @@
 #pragma once
 
+#include "state.h"
+
 #include <memory>  // std::unique_ptr
 #include <utility> // std::forward
+#include <iostream>
 
-#include "state.h"
 
 namespace z80 {
 
@@ -24,6 +26,7 @@ namespace z80 {
     using State = z80::state<inputActionType>;
 
     public:
+    ~stateMachine() { std::cout << "~stateMachine" << std::endl; }
 
     void
     setState(std::unique_ptr<State>&& newState) {

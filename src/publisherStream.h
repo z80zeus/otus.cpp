@@ -11,6 +11,7 @@ namespace z80 {
   class publisherStream: public z80::publisher<std::string> {
     public:
     explicit publisherStream(std::istream& inputStream);
+    ~publisherStream() override;
     void start();
 
     private:

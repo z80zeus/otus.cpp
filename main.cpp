@@ -26,15 +26,22 @@
  * минимальными изменениями.
  */
 
-#include <iostream>
-
 #include "publisherStream.h"
+#include "commandStateMachine.h"
+#include "stateIdle.h"
+
+#include <iostream> // std::cin
+#include <memory>   // std::shared_ptr, std::make_shared
 
 using namespace std;
 using namespace z80;
 
-
 int main() {
-  publisherStream commandSrc(cin);
+  auto commandSrc    = make_shared<publisherStream>(cin);
+  auto commandReader = make_shared<commandStateMachine>();
+  commandReader->setState(make_unique<stateIdle>(commandReader));
+  commandSrc->subscribe(commandReader);
+  commandSrc->start();
+  cout << "End of input listener." << endl;
   return 0;
 }

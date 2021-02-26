@@ -2,6 +2,7 @@
 
 #include <memory> // std::shared_ptr
 #include <set>
+#include <iostream>
 
 #include "subscriber.h"
 
@@ -17,7 +18,7 @@ namespace z80 {
 
     public:
 
-    virtual ~publisher() = default;
+    virtual ~publisher() { std::cout << "~publisher" << std::endl; };
 
     virtual void subscribe(std::shared_ptr<Subscriber> subscriber) {
       subscribers.emplace(subscriber);
