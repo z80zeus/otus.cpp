@@ -26,7 +26,6 @@ namespace z80 {
     using State = z80::state<inputActionType>;
 
     public:
-    ~stateMachine() { std::cout << "~stateMachine" << std::endl; }
 
     void
     setState(std::unique_ptr<State>&& newState) {
@@ -39,7 +38,7 @@ namespace z80 {
         currentState->inputAction(command);
     };
 
-    private:
+    protected:
     std::unique_ptr<State> currentState;
   };
 }

@@ -2,7 +2,7 @@
 
 #include "state.h"
 #include "stateMachine.h"
-#include "commandStateMachine.h"
+#include "commandStateMachineState.h"
 
 #include <string> // std::string
 #include <memory> // std::shared_ptr
@@ -11,16 +11,16 @@ namespace z80 {
   /**
    * @brief Класс состояния "Обработка динамического блока команд".
    */
-  class stateDynamicBlock: public z80::state<std::string> {
+  class commandStateMachineStateDynamicBlock: public z80::commandStateMachineState {
     using StateMachine = z80::stateMachine<std::string>;
 
   public:
-    explicit stateDynamicBlock(const std::weak_ptr<StateMachine>& stateMachine);
-    ~stateDynamicBlock() noexcept override;
+    explicit commandStateMachineStateDynamicBlock(StateMachine& stateMachine);
     void inputAction(const std::string& iAction) override;
 
   private:
-    std::weak_ptr<commandStateMachine>  cStateMachine;
-    std::string savedCommands;
+    void switchStateMachineToIdle() const;
+
+    std::size_t nestingLevel = 0;
   };
 }

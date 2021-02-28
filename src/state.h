@@ -4,7 +4,6 @@
 
 #include <string> // std::string
 #include <memory> // std::sharedPtr
-#include <iostream>
 
 namespace z80 {
 
@@ -20,11 +19,12 @@ namespace z80 {
     using StateMachine = z80::stateMachine<inputActionType>;
 
     public:
-    explicit state(std::weak_ptr<StateMachine> stateMachine): sm(stateMachine) {};
-    virtual ~state() { std::cout << "~state" << std::endl; };  // default;
+    explicit state(StateMachine& stateMachine): sm(stateMachine) {};
+    virtual ~state() = default;
     virtual void inputAction(const inputActionType& iAction) = 0;
+    virtual void finish () = 0;
 
   protected:
-    std::weak_ptr<StateMachine> sm;
+    StateMachine& sm;
   };
 }

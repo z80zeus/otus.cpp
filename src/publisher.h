@@ -1,10 +1,12 @@
 #pragma once
 
-#include <memory> // std::shared_ptr
-#include <set>
+#include "subscriber.h"
+
 #include <iostream>
 
-#include "subscriber.h"
+#include <functional> // std::reference_wrapper
+#include <memory>     // std::weak_ptr
+#include <vector>
 
 namespace z80 {
 
@@ -18,22 +20,26 @@ namespace z80 {
 
     public:
 
-    virtual ~publisher() { std::cout << "~publisher" << std::endl; };
+    virtual ~publisher() = default;
 
-    virtual void subscribe(std::shared_ptr<Subscriber> subscriber) {
-      subscribers.emplace(subscriber);
+    //virtual void subscribe(std::weak_ptr<Subscriber> subscriber) {
+    virtual void subscribe(Subscriber& subscriber) {
+      subscribers.push_back(subscriber);
     }
 
-    virtual void unsubscribe(std::shared_ptr<Subscriber> subscriber) {
-      subscribers.erase(subscriber);
+    virtual void unsubscribeAll() {
+      for(const auto& subscriber : subscribers)
+        subscriber.get().unsubscribed();
+      subscribers.clear();
     }
 
     virtual void notify(const T& data) {
-      for(auto& subscriber : subscribers)
-        subscriber->update(data);
+      for(const auto& subscriber : subscribers)
+        subscriber.get().update(data);
     }
 
     private:
-    std::set<std::shared_ptr<Subscriber>> subscribers;
+    //std::set<std::shared_ptr<Subscriber>> subscribers;
+    std::vector<std::reference_wrapper<Subscriber>> subscribers;
   };
 }

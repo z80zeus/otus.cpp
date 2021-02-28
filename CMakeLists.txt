@@ -13,17 +13,19 @@ configure_file(src/version.h.in version.h)
 add_library(libversion OBJECT src/version.cpp)
 target_include_directories(libversion PRIVATE "${PROJECT_BINARY_DIR}")
 
-add_library(publisherStream OBJECT src/publisherStream.cpp)
-add_library(stateIdle OBJECT src/stateIdle.cpp)
-add_library(stateStaticBlock OBJECT src/stateStaticBlock.cpp)
-add_library(stateDynamicBlock OBJECT src/stateDynamicBlock.cpp)
+add_library(publisherCommandsFromStream OBJECT src/publisherCommandsFromStream.cpp)
 add_library(commandStateMachine OBJECT src/commandStateMachine.cpp)
+add_library(commandStateMachineState OBJECT src/commandStateMachineState.cpp)
+add_library(commandStateMachineStateIdle OBJECT src/commandStateMachineStateIdle.cpp)
+add_library(commandStateMachineStateStaticBlock OBJECT src/commandStateMachineStateStaticBlock.cpp)
+add_library(commandStateMachineStateDynamicBlock OBJECT src/commandStateMachineStateDynamicBlock.cpp)
+add_library(commandBlockPrinter OBJECT src/commandBlockPrinter.cpp)
 
 add_executable(bulk main.cpp)
 target_include_directories(bulk PRIVATE "${PROJECT_SOURCE_DIR}/src")
-target_link_libraries(bulk libversion publisherStream
-        stateIdle stateStaticBlock stateDynamicBlock
-        commandStateMachine)
+target_link_libraries(bulk libversion publisherCommandsFromStream commandStateMachine commandStateMachineState
+        commandStateMachineStateIdle commandStateMachineStateStaticBlock commandStateMachineStateDynamicBlock
+        commandBlockPrinter)
 
 ## Boost test
 #find_package(Boost COMPONENTS unit_test_framework REQUIRED)

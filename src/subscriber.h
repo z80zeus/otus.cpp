@@ -1,7 +1,5 @@
 #pragma once
 
-#include <iostream>
-
 namespace z80 {
   /**
    * @brief Шаблон класса subscriber. Обеспечивает функционал подписчика на событие.
@@ -11,7 +9,8 @@ namespace z80 {
   template<typename T>
   class subscriber {
     public:
-    virtual ~subscriber() { std::cout << "~subscriber" << std::endl; };
+    virtual ~subscriber() = default;
     virtual void update(const T& data) = 0;
+    virtual void unsubscribed() {};
   };
 }
