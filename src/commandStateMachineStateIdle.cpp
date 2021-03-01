@@ -3,7 +3,6 @@
 #include "commandStateMachineStateStaticBlock.h"
 
 #include <stdexcept>  // std::invalid_argument exception
-#include <utility>    // std::forward
 
 using namespace std;
 using namespace z80;

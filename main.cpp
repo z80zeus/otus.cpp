@@ -26,27 +26,59 @@
  * минимальными изменениями.
  */
 
-#include "commandStateMachine.h"
-#include "commandStateMachineStateIdle.h"
 #include "commandBlockFiler.h"
 #include "commandBlockPrinter.h"
+#include "commandStateMachine.h"
 #include "publisherCommandsFromStream.h"
 
-#include <memory>   // std::shared_ptr, std::make_shared
+#include <cctype>     // std::isdigit
+#include <iostream>   // std::cout, std::cin
+#include <stdexcept>  // std::invalid_argument, std::out_of_range
+#include <string>     // std::stoul
 
 using namespace std;
 using namespace z80;
 
-int main() {
-  publisherCommandsFromStream commandSrc(cin);
-  commandStateMachine         commandMachine;
-  commandBlockPrinter         commandPrinter(cout);
-  commandBlockFiler           commandFiler;
+/**
+ * @brief Преобразование строки в положительное число.
+ * @param param Строка для преобразования
+ * @return Число, соответствующее строке.
+ */
+size_t getStaticBlockSizeFromArgv(const string& param);
 
-  commandSrc.subscribe(commandMachine);
-  commandMachine.subscribe(commandPrinter);
-  commandMachine.subscribe(commandFiler);
+int
+main(int argc, char* argv[]) {
+  try {
+    publisherCommandsFromStream commandSrc(cin);
+    commandStateMachine commandMachine;
+    commandBlockPrinter commandPrinter(cout);
+    commandBlockFiler commandFiler;
 
-  commandSrc.start();
+    if (argc > 1)
+      commandMachine.setStaticBlockSize(getStaticBlockSizeFromArgv(argv[1]));
+
+    commandSrc.subscribe(commandMachine);
+    commandMachine.subscribe(commandPrinter);
+    commandMachine.subscribe(commandFiler);
+
+    commandSrc.start();
+  }
+  catch (const exception& e) {
+    cerr << e.what() << endl;
+  }
   return 0;
+}
+
+size_t
+getStaticBlockSizeFromArgv(const string& param) {
+  if (!all_of(cbegin(param), cend(param), [](auto sym) { return isdigit(sym); }))
+    throw invalid_argument("Not number");
+  size_t rtn;
+  try {
+    rtn = std::stoul(param, nullptr, 10);
+  }
+  catch (const out_of_range&) {
+    throw out_of_range("Number too large");
+  }
+  return rtn;
 }

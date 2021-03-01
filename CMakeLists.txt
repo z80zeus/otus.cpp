@@ -39,13 +39,13 @@ target_link_libraries(bulk libversion publisherCommandsFromStream commandStateMa
 #enable_testing()
 #add_test(test_version test_libversion)
 #
-## doxygen
-#find_package(Doxygen REQUIRED dot)
-#set(DOXYGEN_PROJECT_BRIEF ${PROJECT_NAME})
-#set(DOXYGEN_HAVE_DOT YES)
-#set(DOXYGEN_EXTRACT_ALL YES)
-#set(DOXYGEN_OUTPUT_DIRECTORY docs)
-#doxygen_add_docs(doxygen src ALL)
+# doxygen
+find_package(Doxygen REQUIRED dot)
+set(DOXYGEN_PROJECT_BRIEF ${PROJECT_NAME})
+set(DOXYGEN_HAVE_DOT YES)
+set(DOXYGEN_EXTRACT_ALL YES)
+set(DOXYGEN_OUTPUT_DIRECTORY docs)
+doxygen_add_docs(doxygen src ALL)
 
 ## compiler specific options
 #if (MSVC)

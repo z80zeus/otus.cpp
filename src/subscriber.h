@@ -1,3 +1,8 @@
+/**
+ * @brief Файл содержит объявление шаблонного класса "Подписчик" (subscriber).
+ * @author Владимир Лазарев solock@mail.ru
+ */
+
 #pragma once
 
 namespace z80 {
@@ -9,10 +14,20 @@ namespace z80 {
   template<typename T>
   class subscriber {
   public:
+    /**
+     * @brief Деструктор полиморфного класса имеет реализацию по-умолчанию.
+     */
     virtual ~subscriber() = default;
 
+    /**
+     * @brief Оповещение подписчика о значении.
+     * @param data Значение, присланное издателем.
+     */
     virtual void update(const T& data) = 0;
 
+    /**
+     * @brief Оповещение подписчика об отписке от издателя.
+     */
     virtual void unsubscribed() {};
   };
 }

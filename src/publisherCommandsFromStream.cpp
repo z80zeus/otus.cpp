@@ -1,11 +1,9 @@
 #include "publisherCommandsFromStream.h"
 
-#include <string>   // getline
-#include <iostream> // std::cout
+#include <string>   // std::getline
 
-
-using namespace std;
 using namespace z80;
+using namespace std;
 
 publisherCommandsFromStream::publisherCommandsFromStream(istream& inputStream) : is(inputStream) {
 }

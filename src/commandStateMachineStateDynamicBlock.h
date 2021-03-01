@@ -1,8 +1,7 @@
 /**
- * @brief Файл содержит объявление класса - состояния конечного автомата "Обработка динамического блока команд".
+ * @brief Файл содержит объявление класса - состояния "Обработка динамического блока команд" для конечного автомата.
  * @author Владимир Лазарев solock@mail.ru
  */
-
 #pragma once
 
 #include "commandStateMachineState.h"
@@ -18,7 +17,6 @@ namespace z80 {
    * обрабатывающим строковые команды и наследуется от общего класса состояний автомата данного вида -
    * z80::commandStateMachineState.
    */
-
   class commandStateMachineStateDynamicBlock : public z80::commandStateMachineState {
     using StateMachine = z80::stateMachine<std::string>;
 
