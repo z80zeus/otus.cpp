@@ -28,6 +28,7 @@
 
 #include "commandStateMachine.h"
 #include "commandStateMachineStateIdle.h"
+#include "commandBlockFiler.h"
 #include "commandBlockPrinter.h"
 #include "publisherCommandsFromStream.h"
 
@@ -37,12 +38,14 @@ using namespace std;
 using namespace z80;
 
 int main() {
-  publisherCommandsFromStream commandSrc(cin);//     = make_shared<publisherCommandsFromCin>(cin);
-  commandStateMachine      commandMachine;// = make_shared<commandStateMachine>();
-  commandBlockPrinter      commandPrinter;  // = make_shared<commandBlockPrinter>();
+  publisherCommandsFromStream commandSrc(cin);
+  commandStateMachine         commandMachine;
+  commandBlockPrinter         commandPrinter(cout);
+  commandBlockFiler           commandFiler;
 
   commandSrc.subscribe(commandMachine);
   commandMachine.subscribe(commandPrinter);
+  commandMachine.subscribe(commandFiler);
 
   commandSrc.start();
   return 0;

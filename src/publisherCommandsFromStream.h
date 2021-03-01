@@ -8,12 +8,13 @@ namespace z80 {
    * @brief Publisher строк из строкового потока.
    * @details Расширяет класс publisher типизированный std::string.
    */
-  class publisherCommandsFromStream: public z80::publisher<std::string> {
-    public:
+  class publisherCommandsFromStream : public z80::publisher<std::string> {
+  public:
     explicit publisherCommandsFromStream(std::istream& inputStream);
+
     void start();
 
-    private:
+  private:
     std::istream& is;
   };
 }

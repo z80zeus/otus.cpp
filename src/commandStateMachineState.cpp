@@ -3,10 +3,10 @@
 using namespace z80;
 using namespace std;
 
-commandStateMachineState::commandStateMachineState(StateMachine& stateMachine):
-state<string>(stateMachine),
-cStateMachine(static_cast<commandStateMachine&>(stateMachine)),
-blockStartTime(time(nullptr)) {}
+commandStateMachineState::commandStateMachineState(StateMachine& stateMachine) :
+    state<string>(stateMachine),
+    cStateMachine(static_cast<commandStateMachine&>(stateMachine)),
+    blockStartTime(time(nullptr)) {}
 
 void
 commandStateMachineState::sendSavedCommands() {

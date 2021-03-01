@@ -7,7 +7,7 @@
 using namespace std;
 using namespace z80;
 
-publisherCommandsFromStream::publisherCommandsFromStream(istream& inputStream): is(inputStream) {
+publisherCommandsFromStream::publisherCommandsFromStream(istream& inputStream) : is(inputStream) {
 }
 
 void

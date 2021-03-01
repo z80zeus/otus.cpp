@@ -8,8 +8,8 @@
 using namespace std;
 using namespace z80;
 
-commandStateMachineStateIdle::commandStateMachineStateIdle(StateMachine& stateMachine):
-commandStateMachineState(stateMachine) {
+commandStateMachineStateIdle::commandStateMachineStateIdle(StateMachine& stateMachine) :
+    commandStateMachineState(stateMachine) {
 }
 
 void
@@ -27,15 +27,9 @@ commandStateMachineStateIdle::inputAction(const string& iAction) {
 void
 commandStateMachineStateIdle::switchStateMachineToDynamicBlock() const {
   sm.setState(make_unique<commandStateMachineStateDynamicBlock>(sm));
-//  auto csm = sm.lock();
-//  if (csm)
-//    csm->setState(std::move(make_unique<commandStateMachineStateDynamicBlock>(sm)));
 }
 
 void
 commandStateMachineStateIdle::switchStateMachineToStaticBlock(const std::string& iAction) const {
   sm.setState(make_unique<commandStateMachineStateStaticBlock>(sm, iAction));
-//  auto csm = sm.lock();
-//  if (csm)
-//    csm->setState(std::move(make_unique<commandStateMachineStateStaticBlock>(sm, iAction)));
 }

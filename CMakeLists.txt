@@ -20,12 +20,13 @@ add_library(commandStateMachineStateIdle OBJECT src/commandStateMachineStateIdle
 add_library(commandStateMachineStateStaticBlock OBJECT src/commandStateMachineStateStaticBlock.cpp)
 add_library(commandStateMachineStateDynamicBlock OBJECT src/commandStateMachineStateDynamicBlock.cpp)
 add_library(commandBlockPrinter OBJECT src/commandBlockPrinter.cpp)
+add_library(commandBlockFiler OBJECT src/commandBlockFiler.cpp)
 
 add_executable(bulk main.cpp)
 target_include_directories(bulk PRIVATE "${PROJECT_SOURCE_DIR}/src")
 target_link_libraries(bulk libversion publisherCommandsFromStream commandStateMachine commandStateMachineState
         commandStateMachineStateIdle commandStateMachineStateStaticBlock commandStateMachineStateDynamicBlock
-        commandBlockPrinter)
+        commandBlockPrinter commandBlockFiler)
 
 ## Boost test
 #find_package(Boost COMPONENTS unit_test_framework REQUIRED)

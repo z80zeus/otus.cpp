@@ -18,11 +18,14 @@ namespace z80 {
   class state {
     using StateMachine = z80::stateMachine<inputActionType>;
 
-    public:
-    explicit state(StateMachine& stateMachine): sm(stateMachine) {};
+  public:
+    explicit state(StateMachine& stateMachine) : sm(stateMachine) {};
+
     virtual ~state() = default;
+
     virtual void inputAction(const inputActionType& iAction) = 0;
-    virtual void finish () = 0;
+
+    virtual void finish() = 0;
 
   protected:
     StateMachine& sm;

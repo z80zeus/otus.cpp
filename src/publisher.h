@@ -18,7 +18,7 @@ namespace z80 {
   class publisher {
     using Subscriber = z80::subscriber<T>;
 
-    public:
+  public:
 
     virtual ~publisher() = default;
 
@@ -28,18 +28,18 @@ namespace z80 {
     }
 
     virtual void unsubscribeAll() {
-      for(const auto& subscriber : subscribers)
+      for (const auto& subscriber : subscribers)
         subscriber.get().unsubscribed();
       subscribers.clear();
     }
 
     virtual void notify(const T& data) {
-      for(const auto& subscriber : subscribers)
+      for (const auto& subscriber : subscribers)
         subscriber.get().update(data);
     }
 
-    private:
+  private:
     //std::set<std::shared_ptr<Subscriber>> subscribers;
-    std::vector<std::reference_wrapper<Subscriber>> subscribers;
+    std::vector <std::reference_wrapper<Subscriber>> subscribers;
   };
 }

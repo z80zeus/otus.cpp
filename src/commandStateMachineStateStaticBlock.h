@@ -19,14 +19,17 @@ namespace z80 {
     commandStateMachineStateStaticBlock(StateMachine& stateMachine, const std::string& iAction);
 
     void inputAction(const std::string& iAction) override;
+
     void finish() override;
 
   private:
-    void addInputAction (const std::string& iAction);
+    void addInputAction(const std::string& iAction);
+
     void switchStateMachineToIdle() const;
+
     void switchStateMachineToDynamicBlock() const;
 
-    std::size_t   commandsCount = 0;
-    std::size_t   blockSize     = 3;
+    std::size_t commandsCount = 0;
+    std::size_t blockSize = 3;
   };
 }

@@ -1,16 +1,15 @@
 #include "commandStateMachine.h"
 #include "commandStateMachineStateIdle.h"
 
-#include <memory>
-#include <iostream>
+#include <memory> // std::make_unique
 
-using namespace std;
 using namespace z80;
+using namespace std;
 
-commandStateMachine::commandStateMachine():
-stateMachine<string>(),
-subscriber<string>(),
-publisher<string>() {
+commandStateMachine::commandStateMachine() :
+    stateMachine<string>(),
+    subscriber<string>(),
+    publisher<string>() {
   setState(make_unique<commandStateMachineStateIdle>(*this));
 }
 

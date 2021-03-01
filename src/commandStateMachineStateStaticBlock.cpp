@@ -4,12 +4,12 @@
 #include "commandStateMachineStateStaticBlock.h"
 
 
-
 using namespace std;
 using namespace z80;
 
-commandStateMachineStateStaticBlock::commandStateMachineStateStaticBlock(StateMachine& stateMachine, const std::string& iAction):
-commandStateMachineState(stateMachine) {
+commandStateMachineStateStaticBlock::commandStateMachineStateStaticBlock(StateMachine& stateMachine,
+                                                                         const std::string& iAction) :
+    commandStateMachineState(stateMachine) {
   blockSize = cStateMachine.getStaticBlockSize();
   addInputAction(iAction);
 }

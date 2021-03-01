@@ -21,15 +21,15 @@ namespace z80 {
    * 2. Передаёт текущему состоянию входное воздействие.
    * 3. Изменяет текущее состояние по команде (в т.ч. самогО состояния).
    */
-  template <typename inputActionType>
+  template<typename inputActionType>
   class stateMachine {
     using State = z80::state<inputActionType>;
 
-    public:
+  public:
 
     void
-    setState(std::unique_ptr<State>&& newState) {
-      currentState = std::forward<std::unique_ptr<State>>(newState);
+    setState(std::unique_ptr <State>&& newState) {
+      currentState = std::forward < std::unique_ptr < State >> (newState);
     };
 
     void
@@ -38,7 +38,7 @@ namespace z80 {
         currentState->inputAction(command);
     };
 
-    protected:
-    std::unique_ptr<State> currentState;
+  protected:
+    std::unique_ptr <State> currentState;
   };
 }
