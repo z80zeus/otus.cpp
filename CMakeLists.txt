@@ -29,16 +29,21 @@ target_link_libraries(bulk libversion publisherCommandsFromStream commandStateMa
         commandBlockPrinter commandBlockFiler)
 
 ## Boost test
-#find_package(Boost COMPONENTS unit_test_framework REQUIRED)
-#
-## Test libversion
-#add_executable(test_libversion test/test_libversion.cpp)
-#target_link_libraries(test_libversion ${Boost_LIBRARIES} libversion)
-#set_target_properties(test_libversion PROPERTIES COMPILE_DEFINITIONS BOOST_TEST_DYN_LINK INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR})
-#
-#enable_testing()
-#add_test(test_version test_libversion)
-#
+find_package(Boost COMPONENTS unit_test_framework REQUIRED)
+
+# Test libversion
+add_executable(test_libversion test/test_libversion.cpp)
+target_link_libraries(test_libversion ${Boost_LIBRARIES} libversion)
+set_target_properties(test_libversion PROPERTIES COMPILE_DEFINITIONS BOOST_TEST_DYN_LINK INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR})
+
+add_executable(test_pcfs test/test_publisherCommandsFromStream.cpp)
+target_link_libraries(test_pcfs ${Boost_LIBRARIES} publisherCommandsFromStream commandBlockPrinter commandBlockFiler)
+set_target_properties(test_pcfs PROPERTIES COMPILE_DEFINITIONS BOOST_TEST_DYN_LINK INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR})
+
+enable_testing()
+add_test(test_version test_libversion)
+add_test(test_version test_pcfs)
+
 # doxygen
 find_package(Doxygen REQUIRED dot)
 set(DOXYGEN_PROJECT_BRIEF ${PROJECT_NAME})
