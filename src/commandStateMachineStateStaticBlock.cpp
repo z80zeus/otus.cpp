@@ -27,8 +27,6 @@ commandStateMachineStateStaticBlock::inputAction(const string& iAction) {
 void
 commandStateMachineStateStaticBlock::addInputAction(const string& iAction) {
   if (iAction == "{") {
-    savedCommands += " ";
-    savedCommands += asctime(localtime(&blockStartTime));
     sendSavedCommands();
     commandsCount = 0;
     switchStateMachineToDynamicBlock();
