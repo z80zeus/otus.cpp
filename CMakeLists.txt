@@ -21,36 +21,38 @@ add_library(commandStateMachineStateStaticBlock OBJECT src/commandStateMachineSt
 add_library(commandStateMachineStateDynamicBlock OBJECT src/commandStateMachineStateDynamicBlock.cpp)
 add_library(commandBlockPrinter OBJECT src/commandBlockPrinter.cpp)
 add_library(commandBlockFiler OBJECT src/commandBlockFiler.cpp)
+add_library(libInterface OBJECT src/libInterface.cpp)
 
 add_executable(bulk main.cpp)
 target_include_directories(bulk PRIVATE "${PROJECT_SOURCE_DIR}/src")
 target_link_libraries(bulk libversion publisherCommandsFromStream commandStateMachine commandStateMachineState
         commandStateMachineStateIdle commandStateMachineStateStaticBlock commandStateMachineStateDynamicBlock
-        commandBlockPrinter commandBlockFiler)
+        commandBlockPrinter commandBlockFiler
+        libInterface)
 
 ## Boost test
-find_package(Boost COMPONENTS unit_test_framework REQUIRED)
-
-# Test libversion
-add_executable(test_libversion test/test_libversion.cpp)
-target_link_libraries(test_libversion ${Boost_LIBRARIES} libversion)
-set_target_properties(test_libversion PROPERTIES COMPILE_DEFINITIONS BOOST_TEST_DYN_LINK INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR})
-
-add_executable(test_pcfs test/test_publisherCommandsFromStream.cpp)
-target_link_libraries(test_pcfs ${Boost_LIBRARIES} publisherCommandsFromStream commandBlockPrinter commandBlockFiler)
-set_target_properties(test_pcfs PROPERTIES COMPILE_DEFINITIONS BOOST_TEST_DYN_LINK INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR})
-
-enable_testing()
-add_test(test_version test_libversion)
-add_test(test_version test_pcfs)
-
-# doxygen
-find_package(Doxygen REQUIRED dot)
-set(DOXYGEN_PROJECT_BRIEF ${PROJECT_NAME})
-set(DOXYGEN_HAVE_DOT YES)
-set(DOXYGEN_EXTRACT_ALL YES)
-set(DOXYGEN_OUTPUT_DIRECTORY docs)
-doxygen_add_docs(doxygen src ALL)
+#find_package(Boost COMPONENTS unit_test_framework REQUIRED)
+#
+## Test libversion
+#add_executable(test_libversion test/test_libversion.cpp)
+#target_link_libraries(test_libversion ${Boost_LIBRARIES} libversion)
+#set_target_properties(test_libversion PROPERTIES COMPILE_DEFINITIONS BOOST_TEST_DYN_LINK INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR})
+#
+#add_executable(test_pcfs test/test_publisherCommandsFromStream.cpp)
+#target_link_libraries(test_pcfs ${Boost_LIBRARIES} publisherCommandsFromStream commandBlockPrinter commandBlockFiler)
+#set_target_properties(test_pcfs PROPERTIES COMPILE_DEFINITIONS BOOST_TEST_DYN_LINK INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR})
+#
+#enable_testing()
+#add_test(test_version test_libversion)
+#add_test(test_version test_pcfs)
+#
+## doxygen
+#find_package(Doxygen REQUIRED dot)
+#set(DOXYGEN_PROJECT_BRIEF ${PROJECT_NAME})
+#set(DOXYGEN_HAVE_DOT YES)
+#set(DOXYGEN_EXTRACT_ALL YES)
+#set(DOXYGEN_OUTPUT_DIRECTORY docs)
+#doxygen_add_docs(doxygen src ALL)
 
 ## compiler specific options
 #if (MSVC)
