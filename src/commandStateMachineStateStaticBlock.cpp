@@ -7,10 +7,10 @@
 using namespace std;
 using namespace z80;
 
-commandStateMachineStateStaticBlock::commandStateMachineStateStaticBlock(commandStateMachine& stateMachine,
+commandStateMachineStateStaticBlock::commandStateMachineStateStaticBlock(commandStateMachine* stateMachine,
                                                                          const string& iAction):
     commandStateMachineState(stateMachine),
-    blockSize { cStateMachine.getStaticBlockSize() } {
+    blockSize { cStateMachine->getStaticBlockSize() } {
   addInputAction(iAction);
 }
 
@@ -46,12 +46,12 @@ commandStateMachineStateStaticBlock::addInputAction(const string& iAction) {
 
 void
 commandStateMachineStateStaticBlock::switchStateMachineToIdle() const {
-  sm.setState(make_unique<commandStateMachineStateIdle>(cStateMachine));
+  sm->setState(make_unique<commandStateMachineStateIdle>(cStateMachine));
 }
 
 void
 commandStateMachineStateStaticBlock::switchStateMachineToDynamicBlock() const {
-  sm.setState(make_unique<commandStateMachineStateDynamicBlock>(cStateMachine));
+  sm->setState(make_unique<commandStateMachineStateDynamicBlock>(cStateMachine));
 }
 
 unique_ptr<state<string>>

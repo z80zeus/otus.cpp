@@ -32,10 +32,8 @@ namespace z80 {
     stateMachine() = default;
 
     stateMachine(z80::stateMachine<inputActionType>&& sm) noexcept : currentState(std::move(sm.currentState)) {
-      currentState->setStateMachine(*this);
+      currentState->setStateMachine(this);
     }
-
-    virtual void blablabla() = 0;
 
     /**
      * @brief Виртуальный деструктор делает класс полиморфным. Это нужно для приведения ссылок и указателей на этот класс

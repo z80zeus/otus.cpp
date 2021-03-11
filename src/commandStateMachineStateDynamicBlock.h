@@ -23,10 +23,10 @@ namespace z80 {
 
   public:
     /**
-     * @brief Конструкту состояния передаётся ссылка на автомат, в контексте которого это состояние работают.
+     * @brief Конструкту состояния передаётся ссылка на автомат, в контексте которого это состояние работает.
      * @param stateMachine Ссылка на объект-автомат.
      */
-    explicit commandStateMachineStateDynamicBlock(commandStateMachine& stateMachine);
+    explicit commandStateMachineStateDynamicBlock(commandStateMachine* stateMachine);
 
     commandStateMachineStateDynamicBlock(const commandStateMachineStateDynamicBlock& sms);
 

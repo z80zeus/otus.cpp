@@ -40,8 +40,6 @@ namespace z80 {
      */
     ~commandStateMachine() noexcept override = default;
 
-    void blablabla() override;
-
     /**
      * @brief Оператор присваивания.
      * @param csm Автомат, состояние которого копируется в текущий.

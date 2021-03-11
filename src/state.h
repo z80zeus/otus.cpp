@@ -30,7 +30,7 @@ namespace z80 {
      * @brief Конструктору состояния передаётся ссылка на автомат, в контексте которого он работает.
      * @param stateMachine Автомат, в контексте которого работает данное состояние.
      */
-    explicit state(StateMachine& stateMachine) : sm{stateMachine} {};
+    explicit state(StateMachine* stateMachine) : sm{stateMachine} {};
 
     /**
      * @brief Копирующий конструктор копирует из исходного объекта ссылку на автомат.
@@ -61,14 +61,14 @@ namespace z80 {
      */
     virtual void finish() = 0;
 
-    virtual void setStateMachine(z80::stateMachine<inputActionType>& sMachine) {
+    virtual void setStateMachine(z80::stateMachine<inputActionType>* sMachine) {
       sm = sMachine;
     }
 
   protected:
     /**
-     * @brief Ссылка на конечный автомат, с которым работает данное состояние.
+     * @brief Указатель на конечный автомат, с которым работает данное состояние.
      */
-    StateMachine& sm;
+    StateMachine* sm = nullptr;
   };
 }

@@ -25,7 +25,7 @@ namespace z80 {
      * @brief Конструкту состояния передаётся ссылка на автомат, в контексте которого это состояние работают.
      * @param stateMachine Ссылка на объект-автомат.
      */
-    explicit commandStateMachineStateIdle(commandStateMachine& stateMachine);
+    explicit commandStateMachineStateIdle(commandStateMachine* stateMachine);
 
     commandStateMachineStateIdle(const commandStateMachineStateIdle& sms);
 

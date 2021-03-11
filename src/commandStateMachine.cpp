@@ -11,7 +11,7 @@ commandStateMachine::commandStateMachine() :
   stateMachine<string>(),
   subscriber<string>(),
   publisher<string>() {
-  setState(make_unique<commandStateMachineStateIdle>(*this));
+  setState(make_unique<commandStateMachineStateIdle>(this));
 }
 
 commandStateMachine::commandStateMachine(commandStateMachine&& csm) noexcept:
@@ -20,8 +20,6 @@ commandStateMachine::commandStateMachine(commandStateMachine&& csm) noexcept:
   publisher<string>(),
   staticBlockSize(csm.staticBlockSize) {
 }
-
-void commandStateMachine::blablabla() {}
 
 //commandStateMachine::~commandStateMachine() noexcept {
 //  if (currentState)

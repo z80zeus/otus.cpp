@@ -31,7 +31,7 @@ namespace z80 {
      */
     void finish() override;
 
-    void setStateMachine(z80::stateMachine<std::string>& sMachine) override;
+    void setStateMachine(z80::stateMachine<std::string>* sMachine) override;
 
     protected:
     /**
@@ -40,7 +40,7 @@ namespace z80 {
      * @param sm Ссылка на автомат, в контексте которого работает данное конструируемое состояние.
      * Используется для доступа к функционалу автомата из состояния.
      */
-    explicit commandStateMachineState(commandStateMachine& sm);
+    explicit commandStateMachineState(commandStateMachine* sm);
 
     /**
      * @brief
@@ -62,14 +62,14 @@ namespace z80 {
     std::string savedCommands;
 
     /**
-     * @brief Ссылка на объект автомата, приведённый к типу z80::commandStateMachine. Для объектов производных классов.
+     * @brief Указатель на объект автомата, приведённый к типу z80::commandStateMachine. Для объектов производных классов.
      */
-    z80::commandStateMachine& cStateMachine;
+    z80::commandStateMachine* cStateMachine = nullptr;
 
     /**
      * @brief Время (unixtime) начала (открытия) текущего блока команд. Это время инициализируется в конструкторе и
      * используется в работе функции sendSavedCommands().
      */
-    std::time_t blockStartTime;
+    std::time_t blockStartTime = std::time_t();
   };
 }
