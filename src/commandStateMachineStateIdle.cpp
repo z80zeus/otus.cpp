@@ -7,9 +7,11 @@
 using namespace std;
 using namespace z80;
 
-commandStateMachineStateIdle::commandStateMachineStateIdle(StateMachine& stateMachine) :
+commandStateMachineStateIdle::commandStateMachineStateIdle(commandStateMachine& stateMachine) :
     commandStateMachineState(stateMachine) {
 }
+
+commandStateMachineStateIdle::commandStateMachineStateIdle(const commandStateMachineStateIdle& sms) = default;
 
 void
 commandStateMachineStateIdle::inputAction(const string& iAction) {
@@ -25,10 +27,15 @@ commandStateMachineStateIdle::inputAction(const string& iAction) {
 
 void
 commandStateMachineStateIdle::switchStateMachineToDynamicBlock() const {
-  sm.setState(make_unique<commandStateMachineStateDynamicBlock>(sm));
+  sm.setState(make_unique<commandStateMachineStateDynamicBlock>(cStateMachine));
 }
 
 void
-commandStateMachineStateIdle::switchStateMachineToStaticBlock(const std::string& iAction) const {
-  sm.setState(make_unique<commandStateMachineStateStaticBlock>(sm, iAction));
+commandStateMachineStateIdle::switchStateMachineToStaticBlock(const string& iAction) const {
+  sm.setState(make_unique<commandStateMachineStateStaticBlock>(cStateMachine, iAction));
+}
+
+unique_ptr<state<string>>
+commandStateMachineStateIdle::clone(StateMachine &s) const {
+  return make_unique<commandStateMachineStateIdle>(*this);
 }

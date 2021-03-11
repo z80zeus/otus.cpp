@@ -7,7 +7,9 @@
 
 #include "stateMachine.h"
 
+#include <memory> // std::unique_ptr
 #include <string> // std::string
+
 
 namespace z80 {
 
@@ -28,7 +30,20 @@ namespace z80 {
      * @brief Конструктору состояния передаётся ссылка на автомат, в контексте которого он работает.
      * @param stateMachine Автомат, в контексте которого работает данное состояние.
      */
-    explicit state(StateMachine& stateMachine) : sm(stateMachine) {};
+    explicit state(StateMachine& stateMachine) : sm{stateMachine} {};
+
+    /**
+     * @brief Копирующий конструктор копирует из исходного объекта ссылку на автомат.
+     * @param s Ссылка на объект на основе которого создаётся новый объект state.
+     */
+    state (const z80::state<inputActionType>& s) = default;
+
+    /**
+     * @brief Клонирование объекта state. Это требуется при копировании машин для передачи в новую машину текущего состояния.
+     * @param s Машина к которой привязывается вновь создаваемый объект.
+     * @return
+     */
+    virtual std::unique_ptr<z80::state<inputActionType>> clone(StateMachine& s) const = 0;
 
     /**
      * @brief Деструктор полиморфного класса по-умолчанию.
@@ -45,6 +60,10 @@ namespace z80 {
      * @brief Вызовом данной функции автомат оповещает состояние о завершении своей работы.
      */
     virtual void finish() = 0;
+
+    virtual void setStateMachine(z80::stateMachine<inputActionType>& sMachine) {
+      sm = sMachine;
+    }
 
   protected:
     /**

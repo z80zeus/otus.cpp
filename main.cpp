@@ -1,4 +1,4 @@
-/**
+ /**
  * @brief Самостоятельная работа otus.c++.8: Асинхронное многопоточное программирование.
  * @author Владимир Лазарев solock@mail.ru
  * @details
@@ -51,18 +51,17 @@
  * Данные подаются порциями в разных контекстах в большом объёме без пауз.
  */
 
-#include "commandBlockFiler.h"
-#include "commandBlockPrinter.h"
-#include "commandStateMachine.h"
-#include "publisherCommandsFromStream.h"
+#include "libInterface.h"
 
+#include <algorithm>  // std::all_of
 #include <cctype>     // std::isdigit
 #include <iostream>   // std::cout, std::cin
 #include <stdexcept>  // std::invalid_argument, std::out_of_range
 #include <string>     // std::stoul
 
+
 using namespace std;
-using namespace z80;
+using namespace async;
 
 /**
  * @brief Преобразование строки в положительное число.
@@ -74,19 +73,15 @@ size_t getStaticBlockSizeFromArgv(const string& param);
 int
 main(int argc, char* argv[]) {
   try {
-    publisherCommandsFromStream commandSrc(cin);
-    commandStateMachine commandMachine;
-    commandBlockPrinter commandPrinter(cout);
-    commandBlockFiler commandFiler;
-
+    size_t commandBlockSize = 3;
     if (argc > 1)
-      commandMachine.setStaticBlockSize(getStaticBlockSizeFromArgv(argv[1]));
+      commandBlockSize = getStaticBlockSizeFromArgv(argv[1]);
 
-    commandSrc.subscribe(commandMachine);
-    commandMachine.subscribe(commandPrinter);
-    commandMachine.subscribe(commandFiler);
+    string data {"1\n2\n3\n\4\n5\n6\n"};
 
-    commandSrc.start();
+    handle_t commandMachineHandle = connect(commandBlockSize);
+    receive(commandMachineHandle, data.c_str(), data.length());
+    disconnect(commandMachineHandle);
   }
   catch (const exception& e) {
     cerr << e.what() << endl;
@@ -98,12 +93,10 @@ size_t
 getStaticBlockSizeFromArgv(const string& param) {
   if (!all_of(cbegin(param), cend(param), [](auto sym) { return isdigit(sym); }))
     throw invalid_argument("Not number");
-  size_t rtn;
   try {
-    rtn = std::stoul(param, nullptr, 10);
+    return std::stoul(param, nullptr, 10);
   }
   catch (const out_of_range&) {
     throw out_of_range("Number too large");
   }
-  return rtn;
 }

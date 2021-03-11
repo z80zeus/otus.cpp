@@ -13,22 +13,29 @@ configure_file(src/version.h.in version.h)
 add_library(libversion OBJECT src/version.cpp)
 target_include_directories(libversion PRIVATE "${PROJECT_BINARY_DIR}")
 
-add_library(publisherCommandsFromStream OBJECT src/publisherCommandsFromStream.cpp)
-add_library(commandStateMachine OBJECT src/commandStateMachine.cpp)
-add_library(commandStateMachineState OBJECT src/commandStateMachineState.cpp)
-add_library(commandStateMachineStateIdle OBJECT src/commandStateMachineStateIdle.cpp)
-add_library(commandStateMachineStateStaticBlock OBJECT src/commandStateMachineStateStaticBlock.cpp)
-add_library(commandStateMachineStateDynamicBlock OBJECT src/commandStateMachineStateDynamicBlock.cpp)
-add_library(commandBlockPrinter OBJECT src/commandBlockPrinter.cpp)
-add_library(commandBlockFiler OBJECT src/commandBlockFiler.cpp)
-add_library(libInterface OBJECT src/libInterface.cpp)
+add_library(publisherCommandsFromStream STATIC src/publisherCommandsFromStream.cpp)
+add_library(commandStateMachine STATIC src/commandStateMachine.cpp)
+add_library(commandStateMachineState STATIC src/commandStateMachineState.cpp)
+add_library(commandStateMachineStateIdle STATIC src/commandStateMachineStateIdle.cpp)
+add_library(commandStateMachineStateStaticBlock STATIC src/commandStateMachineStateStaticBlock.cpp)
+add_library(commandStateMachineStateDynamicBlock STATIC src/commandStateMachineStateDynamicBlock.cpp)
+add_library(commandBlockPrinter STATIC src/commandBlockPrinter.cpp)
+add_library(commandBlockFiler STATIC src/commandBlockFiler.cpp)
+set_target_properties(publisherCommandsFromStream commandStateMachine
+        commandStateMachineState
+        commandStateMachineStateIdle commandStateMachineStateStaticBlock commandStateMachineStateDynamicBlock
+        commandBlockPrinter
+        commandBlockFiler
+        PROPERTIES
+        POSITION_INDEPENDENT_CODE True)
+add_library(libInterface SHARED src/libInterface.cpp)
+target_link_libraries(libInterface libversion publisherCommandsFromStream commandStateMachine commandStateMachineState
+        commandStateMachineStateIdle commandStateMachineStateStaticBlock commandStateMachineStateDynamicBlock
+        commandBlockPrinter commandBlockFiler)
 
 add_executable(bulk main.cpp)
 target_include_directories(bulk PRIVATE "${PROJECT_SOURCE_DIR}/src")
-target_link_libraries(bulk libversion publisherCommandsFromStream commandStateMachine commandStateMachineState
-        commandStateMachineStateIdle commandStateMachineStateStaticBlock commandStateMachineStateDynamicBlock
-        commandBlockPrinter commandBlockFiler
-        libInterface)
+target_link_libraries(bulk libInterface)
 
 ## Boost test
 #find_package(Boost COMPONENTS unit_test_framework REQUIRED)

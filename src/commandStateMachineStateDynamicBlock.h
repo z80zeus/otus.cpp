@@ -4,6 +4,7 @@
  */
 #pragma once
 
+#include "commandStateMachine.h"
 #include "commandStateMachineState.h"
 #include "state.h"
 #include "stateMachine.h"
@@ -25,7 +26,9 @@ namespace z80 {
      * @brief Конструкту состояния передаётся ссылка на автомат, в контексте которого это состояние работают.
      * @param stateMachine Ссылка на объект-автомат.
      */
-    explicit commandStateMachineStateDynamicBlock(StateMachine& stateMachine);
+    explicit commandStateMachineStateDynamicBlock(commandStateMachine& stateMachine);
+
+    commandStateMachineStateDynamicBlock(const commandStateMachineStateDynamicBlock& sms);
 
     /**
      * @brief Входное воздействие на автомат.
@@ -34,6 +37,8 @@ namespace z80 {
      * (команды).
      */
     void inputAction(const std::string& iAction) override;
+
+    std::unique_ptr<z80::state<std::string>> clone(StateMachine& s) const override;
 
   private:
     /**

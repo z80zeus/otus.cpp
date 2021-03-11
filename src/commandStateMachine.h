@@ -33,6 +33,22 @@ namespace z80 {
      */
     commandStateMachine();
 
+    commandStateMachine(commandStateMachine&& csm) noexcept ;
+
+    /**
+     * @brief Деструктор даёт команду finish текущему состоянию.
+     */
+    ~commandStateMachine() noexcept override = default;
+
+    void blablabla() override;
+
+    /**
+     * @brief Оператор присваивания.
+     * @param csm Автомат, состояние которого копируется в текущий.
+     * @return Ссылка на текущий объект.
+     */
+    commandStateMachine& operator= (const commandStateMachine& csm);
+
     /**
      * @brief Через функцию update объект класса получает команды. Предполагается, что от publisher'а, но ничто
      * не мешает вызвать этот метод и постороннему коду.
@@ -46,7 +62,7 @@ namespace z80 {
      * @brief Функция оповещает объект класса о том, что он, как подписчик, отписан от своего издателя.
      * @details Данный факт воспринимается автоматом, как сигнал завершения работы.
      */
-    void unsubscribed() override;
+    //void unsubscribed() override;
 
     /**
      * @brief Функция устанавливает значение свойства staticBlockSize: размер статического блока команд (выраженного в командах).
@@ -58,7 +74,7 @@ namespace z80 {
      * @brief Функция возвращает значение свойства staticBlockSize: размер статического блока команд (выраженного в командах).
      * @return Ожидаемое количество команд в статическом блоке команд. В штуках команд. По-умолчанию - 3.
      */
-    std::size_t getStaticBlockSize();
+    std::size_t getStaticBlockSize() const;
 
   private:
     std::size_t staticBlockSize = 3;

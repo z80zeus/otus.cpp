@@ -29,11 +29,29 @@ namespace z80 {
     using State = z80::state<inputActionType>;
 
   public:
+    stateMachine() = default;
+
+    stateMachine(z80::stateMachine<inputActionType>&& sm) noexcept : currentState(std::move(sm.currentState)) {
+      currentState->setStateMachine(*this);
+    }
+
+    virtual void blablabla() = 0;
+
+    /**
+     * @brief Виртуальный деструктор делает класс полиморфным. Это нужно для приведения ссылок и указателей на этот класс
+     * вверх по иерархии.
+     */
+    virtual ~stateMachine() {
+      if (currentState)
+        currentState->finish();
+    };
+
     /**
      * @brief Установить новое состояние автомата.
      * @param newState Указатель на объект-состояние.
      */
-    void setState(std::unique_ptr<State>&& newState) {
+    void
+    setState(std::unique_ptr<State>&& newState) {
       currentState = std::forward<std::unique_ptr<State>> (newState);
     };
 
@@ -42,9 +60,21 @@ namespace z80 {
      * @param command Ссылка на объект воздействия.
      * @details Автомат не содержит логики своей работы, поэтому делегирует обработку воздействия текущему объекту-состоянию.
      */
-    void inputAction(const inputActionType& command) {
+    void
+    inputAction(const inputActionType& command) {
       if (currentState)
         currentState->inputAction(command);
+    };
+
+    /**
+    * @brief Оператор присваивания.
+    * @param sm Автомат, состояние которого копируется в текущий.
+    * @return Ссылка на текущий объект.
+    */
+    z80::stateMachine<inputActionType>&
+    operator= (const z80::stateMachine<inputActionType>& sm) {
+      currentState = sm.currentState->clone(*this);
+      return *this;
     };
 
   protected:

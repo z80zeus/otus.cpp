@@ -10,8 +10,9 @@
 #include "state.h"
 #include "stateMachine.h"
 
-#include <string> // std::string, std::to_string
 #include <ctime>  // std::time_t
+#include <memory> // unique_ptr
+#include <string> // std::string, std::to_string
 
 namespace z80 {
   /**
@@ -30,14 +31,22 @@ namespace z80 {
      */
     void finish() override;
 
-  protected:
+    void setStateMachine(z80::stateMachine<std::string>& sMachine) override;
+
+    protected:
     /**
      * @brief Создание объектов данного класса не предусмотрено, поэтому единственный конструктор находится в защищённой
      * секции и вызывается конструкторами классов-наследников.
-     * @param stateMachine Ссылка на автомат, в контексте которого работает данное конструируемое состояние.
+     * @param sm Ссылка на автомат, в контексте которого работает данное конструируемое состояние.
      * Используется для доступа к функционалу автомата из состояния.
      */
-    explicit commandStateMachineState(StateMachine& stateMachine);
+    explicit commandStateMachineState(commandStateMachine& sm);
+
+    /**
+     * @brief
+     * @param sms Ссылка на объект состояния, на основе которого производится копирование.
+     */
+    commandStateMachineState(const commandStateMachineState& sms);
 
     /**
      * @brief Функция отправки сохранённого блока команд. Это - сервисная функция, используемая в наследниках.

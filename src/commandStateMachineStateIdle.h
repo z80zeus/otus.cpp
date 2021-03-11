@@ -25,7 +25,9 @@ namespace z80 {
      * @brief Конструкту состояния передаётся ссылка на автомат, в контексте которого это состояние работают.
      * @param stateMachine Ссылка на объект-автомат.
      */
-    explicit commandStateMachineStateIdle(StateMachine& stateMachine);
+    explicit commandStateMachineStateIdle(commandStateMachine& stateMachine);
+
+    commandStateMachineStateIdle(const commandStateMachineStateIdle& sms);
 
     /**
      * @brief Входное воздействие на автомат.
@@ -34,6 +36,8 @@ namespace z80 {
      * (команды).
      */
     void inputAction(const std::string& iAction) override;
+
+    std::unique_ptr<z80::state<std::string>> clone(StateMachine& s) const override;
 
   private:
     /**

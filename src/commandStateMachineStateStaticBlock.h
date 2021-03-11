@@ -28,7 +28,10 @@ namespace z80 {
      * @param stateMachine Ссылка на объект-автомат.
      * @param iAction Начальное входное воздействие на автомат, которое привело к переключению в данное состояние.
      */
-    commandStateMachineStateStaticBlock(StateMachine& stateMachine, const std::string& iAction);
+    commandStateMachineStateStaticBlock(commandStateMachine& stateMachine, const std::string& iAction);
+
+
+    commandStateMachineStateStaticBlock(const commandStateMachineStateStaticBlock& sms);
 
     /**
      * @brief Входное воздействие на автомат.
@@ -46,6 +49,8 @@ namespace z80 {
      * блок команд.
      */
     void finish() override;
+
+    std::unique_ptr<z80::state<std::string>> clone(StateMachine& s) const override;
 
   private:
     /**

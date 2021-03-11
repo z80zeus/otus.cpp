@@ -7,12 +7,14 @@
 using namespace std;
 using namespace z80;
 
-commandStateMachineStateStaticBlock::commandStateMachineStateStaticBlock(StateMachine& stateMachine,
-                                                                         const std::string& iAction) :
-    commandStateMachineState(stateMachine) {
-  blockSize = cStateMachine.getStaticBlockSize();
+commandStateMachineStateStaticBlock::commandStateMachineStateStaticBlock(commandStateMachine& stateMachine,
+                                                                         const string& iAction):
+    commandStateMachineState(stateMachine),
+    blockSize { cStateMachine.getStaticBlockSize() } {
   addInputAction(iAction);
 }
+
+commandStateMachineStateStaticBlock::commandStateMachineStateStaticBlock(const commandStateMachineStateStaticBlock& sms) = default;
 
 void
 commandStateMachineStateStaticBlock::finish() {
@@ -44,10 +46,15 @@ commandStateMachineStateStaticBlock::addInputAction(const string& iAction) {
 
 void
 commandStateMachineStateStaticBlock::switchStateMachineToIdle() const {
-  sm.setState(make_unique<commandStateMachineStateIdle>(sm));
+  sm.setState(make_unique<commandStateMachineStateIdle>(cStateMachine));
 }
 
 void
 commandStateMachineStateStaticBlock::switchStateMachineToDynamicBlock() const {
-  sm.setState(make_unique<commandStateMachineStateDynamicBlock>(sm));
+  sm.setState(make_unique<commandStateMachineStateDynamicBlock>(cStateMachine));
+}
+
+unique_ptr<state<string>>
+commandStateMachineStateStaticBlock::clone(StateMachine &s) const {
+  return make_unique<commandStateMachineStateStaticBlock>(*this);
 }

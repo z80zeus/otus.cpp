@@ -3,16 +3,27 @@
 using namespace z80;
 using namespace std;
 
-commandStateMachineState::commandStateMachineState(StateMachine& stateMachine) :
-    state<string>(stateMachine),
-    cStateMachine(static_cast<commandStateMachine&>(stateMachine)),
-    blockStartTime(time(nullptr)) {}
+commandStateMachineState::commandStateMachineState(commandStateMachine& csm) :
+state<string>(csm),
+cStateMachine(csm),
+blockStartTime(time(nullptr)) {}
+
+commandStateMachineState::commandStateMachineState(const commandStateMachineState& sms):
+state<string>(sms.sm),
+cStateMachine(sms.cStateMachine),
+blockStartTime(sms.blockStartTime) {};
 
 void
 commandStateMachineState::sendSavedCommands() {
-  static_cast<commandStateMachine&>(sm).notify(to_string(blockStartTime) + " " + savedCommands);
+  cStateMachine.notify(to_string(blockStartTime) + " " + savedCommands);
   savedCommands = "";
 }
 
 void
 commandStateMachineState::finish() {}
+
+void
+commandStateMachineState::setStateMachine(stateMachine<std::string>& sMachine) {
+  // state::setStateMachine(sMachine);
+  cStateMachine = dynamic_cast<commandStateMachine&>(sMachine);
+}
