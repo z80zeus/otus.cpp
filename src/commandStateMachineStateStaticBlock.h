@@ -25,12 +25,12 @@ namespace z80 {
   public:
     /**
      * @brief Конструкту состояния передаётся ссылка на автомат, в контексте которого это состояние работают.
-     * @param stateMachine Ссылка на объект-автомат.
+     * @param sm Указатель на объект-автомат.
      * @param iAction Начальное входное воздействие на автомат, которое привело к переключению в данное состояние.
      */
-    commandStateMachineStateStaticBlock(commandStateMachine* stateMachine, const std::string& iAction);
+    commandStateMachineStateStaticBlock(StateMachine* sm, const std::string& iAction);
 
-    commandStateMachineStateStaticBlock(const commandStateMachineStateStaticBlock& sms);
+//    commandStateMachineStateStaticBlock(const commandStateMachineStateStaticBlock& sms);
 
     /**
      * @brief Входное воздействие на автомат.
@@ -49,7 +49,7 @@ namespace z80 {
      */
     void finish() override;
 
-    std::unique_ptr<z80::state<std::string>> clone(StateMachine& s) const override;
+//    std::unique_ptr<z80::state<std::string>> clone(StateMachine& s) const override;
 
   private:
     /**
@@ -59,7 +59,7 @@ namespace z80 {
      * Функционал вынесен в отдельную функцию, потому что в конструкторе класса должны быть выполнены такие же действия:
      * добавить новую команду в блок.
      */
-    void addInputAction(const std::string& iAction);
+    void inputAction_(const std::string& iAction);
 
     /**
      * @brief Переключить машину в состояние Idle. Это - служебная функция, вызываемая изнутри данного класса.

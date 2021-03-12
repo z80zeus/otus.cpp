@@ -17,21 +17,19 @@ commandStateMachine::commandStateMachine() :
 commandStateMachine::commandStateMachine(commandStateMachine&& csm) noexcept:
   stateMachine<string>(std::forward<commandStateMachine>(csm)),
   subscriber<string>(),
-  publisher<string>(),
+  publisher<string>(std::forward<commandStateMachine>(csm)),
   staticBlockSize(csm.staticBlockSize) {
 }
 
-//commandStateMachine::~commandStateMachine() noexcept {
-//  if (currentState)
-//    currentState->finish();
-//}
-
 commandStateMachine&
 commandStateMachine::operator=(const commandStateMachine& csm) {
-  stateMachine<string>::operator=(csm);
-  staticBlockSize = csm.staticBlockSize;
   return *this;
-}
+};
+//{
+//  stateMachine<string>::operator=(csm);
+//  staticBlockSize = csm.staticBlockSize;
+//  return *this;
+//}
 
 void
 commandStateMachine::update(const string& command) {

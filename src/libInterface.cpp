@@ -40,5 +40,5 @@ void
 async::disconnect (handle_t handle) {
 //  auto cMachineIndex = reinterpret_cast<size_t>(handle);
 //  auto cMachine = commandMachines[cMachineIndex];
-  commandMachines.erase(begin(commandMachines) + reinterpret_cast<size_t>(handle));
+  commandMachines.erase(begin(commandMachines));// + reinterpret_cast<size_t>(handle));
 }

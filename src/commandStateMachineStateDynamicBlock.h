@@ -24,11 +24,11 @@ namespace z80 {
   public:
     /**
      * @brief Конструкту состояния передаётся ссылка на автомат, в контексте которого это состояние работает.
-     * @param stateMachine Ссылка на объект-автомат.
+     * @param sm Ссылка на объект-автомат.
      */
-    explicit commandStateMachineStateDynamicBlock(commandStateMachine* stateMachine);
+    explicit commandStateMachineStateDynamicBlock(StateMachine* sm);
 
-    commandStateMachineStateDynamicBlock(const commandStateMachineStateDynamicBlock& sms);
+//    commandStateMachineStateDynamicBlock(const commandStateMachineStateDynamicBlock& sms);
 
     /**
      * @brief Входное воздействие на автомат.
@@ -38,7 +38,7 @@ namespace z80 {
      */
     void inputAction(const std::string& iAction) override;
 
-    std::unique_ptr<z80::state<std::string>> clone(StateMachine& s) const override;
+//    std::unique_ptr<z80::state<std::string>> clone(StateMachine& s) const override;
 
   private:
     /**

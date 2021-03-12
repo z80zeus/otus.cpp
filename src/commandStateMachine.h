@@ -33,12 +33,12 @@ namespace z80 {
      */
     commandStateMachine();
 
-    commandStateMachine(commandStateMachine&& csm) noexcept ;
-
     /**
-     * @brief Деструктор даёт команду finish текущему состоянию.
+     * @brief Перемещающий конструктор вызывает перемещающие конструкторы базовых классов и переписывает себе параметры
+     * работы машины данного (commandStateMachine) класса из секции private.
+     * @param csm
      */
-    ~commandStateMachine() noexcept override = default;
+    commandStateMachine(commandStateMachine&& csm) noexcept ;
 
     /**
      * @brief Оператор присваивания.
@@ -51,8 +51,8 @@ namespace z80 {
      * @brief Через функцию update объект класса получает команды. Предполагается, что от publisher'а, но ничто
      * не мешает вызвать этот метод и постороннему коду.
      * @param command Новая команда (в терминах учебного задания).
-     * @details Эта функция передаёт полученную команду в качестве входного воздействия в автомат, который унаследован
-     * данным классом от z80::stateMachine (z80::stateMachine::inputAction(command)).
+     * @details Эта функция передаёт полученную команду в качестве входного воздействия в этот же автомат, который
+     * унаследован данным классом от z80::stateMachine (z80::stateMachine::inputAction(command)).
      */
     void update(const std::string& command) override;
 

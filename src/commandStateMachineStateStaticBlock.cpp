@@ -3,18 +3,16 @@
 #include "commandStateMachineStateIdle.h"
 #include "commandStateMachineStateStaticBlock.h"
 
-
 using namespace std;
 using namespace z80;
 
-commandStateMachineStateStaticBlock::commandStateMachineStateStaticBlock(commandStateMachine* stateMachine,
-                                                                         const string& iAction):
-    commandStateMachineState(stateMachine),
-    blockSize { cStateMachine->getStaticBlockSize() } {
-  addInputAction(iAction);
+commandStateMachineStateStaticBlock::commandStateMachineStateStaticBlock(StateMachine* sm, const string& iAction):
+    commandStateMachineState(sm),
+    blockSize { dynamic_cast<commandStateMachine*>(sm)->getStaticBlockSize() } {
+  inputAction_(iAction);
 }
 
-commandStateMachineStateStaticBlock::commandStateMachineStateStaticBlock(const commandStateMachineStateStaticBlock& sms) = default;
+// commandStateMachineStateStaticBlock::commandStateMachineStateStaticBlock(const commandStateMachineStateStaticBlock& sms) = default;
 
 void
 commandStateMachineStateStaticBlock::finish() {
@@ -23,11 +21,11 @@ commandStateMachineStateStaticBlock::finish() {
 
 void
 commandStateMachineStateStaticBlock::inputAction(const string& iAction) {
-  addInputAction(iAction);
+  inputAction_(iAction);
 }
 
 void
-commandStateMachineStateStaticBlock::addInputAction(const string& iAction) {
+commandStateMachineStateStaticBlock::inputAction_(const std::string& iAction) {
   if (iAction == "{") {
     sendSavedCommands();
     commandsCount = 0;
@@ -46,15 +44,15 @@ commandStateMachineStateStaticBlock::addInputAction(const string& iAction) {
 
 void
 commandStateMachineStateStaticBlock::switchStateMachineToIdle() const {
-  sm->setState(make_unique<commandStateMachineStateIdle>(cStateMachine));
+  sm->setState(make_unique<commandStateMachineStateIdle>(sm));
 }
 
 void
 commandStateMachineStateStaticBlock::switchStateMachineToDynamicBlock() const {
-  sm->setState(make_unique<commandStateMachineStateDynamicBlock>(cStateMachine));
+  sm->setState(make_unique<commandStateMachineStateDynamicBlock>(sm));
 }
 
-unique_ptr<state<string>>
-commandStateMachineStateStaticBlock::clone(StateMachine &s) const {
-  return make_unique<commandStateMachineStateStaticBlock>(*this);
-}
+//unique_ptr<state<string>>
+//commandStateMachineStateStaticBlock::clone(StateMachine &s) const {
+//  return make_unique<commandStateMachineStateStaticBlock>(*this);
+//}

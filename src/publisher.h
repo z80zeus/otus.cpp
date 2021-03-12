@@ -22,8 +22,11 @@ namespace z80 {
     using Subscriber = z80::subscriber<T>;
 
   public:
+    publisher() = default;
+    publisher(z80::publisher<T>&& p): subscribers(std::move(p.subscribers)) {};
+
     /**
-     * @brief Деструктор полиморфного класса имеет реализацию по-умолчанию.
+     * @brief Деструктор полиморфного класса. Реализацию по-умолчанию.
      */
     virtual ~publisher() = default;
 

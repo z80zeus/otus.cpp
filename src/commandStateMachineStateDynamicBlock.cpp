@@ -6,12 +6,12 @@
 using namespace z80;
 using namespace std;
 
-commandStateMachineStateDynamicBlock::commandStateMachineStateDynamicBlock(commandStateMachine* stateMachine):
-    commandStateMachineState(stateMachine),
-    nestingLevel(1) {
+commandStateMachineStateDynamicBlock::commandStateMachineStateDynamicBlock(StateMachine* sm):
+  commandStateMachineState(sm),
+  nestingLevel(1) {
 }
 
-commandStateMachineStateDynamicBlock::commandStateMachineStateDynamicBlock(const commandStateMachineStateDynamicBlock& sms) = default;
+//commandStateMachineStateDynamicBlock::commandStateMachineStateDynamicBlock(const commandStateMachineStateDynamicBlock& sms) = default;
 
 void
 commandStateMachineStateDynamicBlock::inputAction(const string& iAction) {
@@ -22,9 +22,9 @@ commandStateMachineStateDynamicBlock::inputAction(const string& iAction) {
 
   if (iAction == "}")           // Конец динамического блока команд.
   {
-    if (--nestingLevel)         // Закончился вложенный блок
-      return;                   // Подолжить работу с динамическим блоком.
-                                // Конец динамического блока верхнего уровня.
+    if (--nestingLevel) return; // Закончился вложенный блок - продолжить работу с динамическим блоком.
+
+    // Конец динамического блока верхнего уровня.
     sendSavedCommands();
     switchStateMachineToIdle();
     return;
@@ -36,10 +36,10 @@ commandStateMachineStateDynamicBlock::inputAction(const string& iAction) {
 
 void
 commandStateMachineStateDynamicBlock::switchStateMachineToIdle() const {
-  sm->setState(make_unique<commandStateMachineStateIdle>(cStateMachine));
+  sm->setState(make_unique<commandStateMachineStateIdle>(sm));
 }
 
-unique_ptr<state<string>>
-commandStateMachineStateDynamicBlock::clone(StateMachine& s) const {
-  return make_unique<commandStateMachineStateDynamicBlock>(*this);
-}
+//unique_ptr<state<string>>
+//commandStateMachineStateDynamicBlock::clone(StateMachine& s) const {
+//  return make_unique<commandStateMachineStateDynamicBlock>(*this);
+//}

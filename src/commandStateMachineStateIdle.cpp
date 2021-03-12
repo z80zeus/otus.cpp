@@ -7,11 +7,11 @@
 using namespace std;
 using namespace z80;
 
-commandStateMachineStateIdle::commandStateMachineStateIdle(commandStateMachine* stateMachine) :
-    commandStateMachineState(stateMachine) {
+commandStateMachineStateIdle::commandStateMachineStateIdle(StateMachine* sm) :
+    commandStateMachineState(sm) {
 }
 
-commandStateMachineStateIdle::commandStateMachineStateIdle(const commandStateMachineStateIdle& sms) = default;
+// commandStateMachineStateIdle::commandStateMachineStateIdle(const commandStateMachineStateIdle& sms) = default;
 
 void
 commandStateMachineStateIdle::inputAction(const string& iAction) {
@@ -27,15 +27,15 @@ commandStateMachineStateIdle::inputAction(const string& iAction) {
 
 void
 commandStateMachineStateIdle::switchStateMachineToDynamicBlock() const {
-  sm->setState(make_unique<commandStateMachineStateDynamicBlock>(cStateMachine));
+  sm->setState(make_unique<commandStateMachineStateDynamicBlock>(sm));
 }
 
 void
 commandStateMachineStateIdle::switchStateMachineToStaticBlock(const string& iAction) const {
-  sm->setState(make_unique<commandStateMachineStateStaticBlock>(cStateMachine, iAction));
+  sm->setState(make_unique<commandStateMachineStateStaticBlock>(sm, iAction));
 }
 
-unique_ptr<state<string>>
-commandStateMachineStateIdle::clone(StateMachine &s) const {
-  return make_unique<commandStateMachineStateIdle>(*this);
-}
+//unique_ptr<state<string>>
+//commandStateMachineStateIdle::clone(StateMachine &s) const {
+//  return make_unique<commandStateMachineStateIdle>(*this);
+//}

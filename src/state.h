@@ -27,7 +27,7 @@ namespace z80 {
 
   public:
     /**
-     * @brief Конструктору состояния передаётся ссылка на автомат, в контексте которого он работает.
+     * @brief Конструктору состояния передаётся указатель на автомат, в контексте которого он работает.
      * @param stateMachine Автомат, в контексте которого работает данное состояние.
      */
     explicit state(StateMachine* stateMachine) : sm{stateMachine} {};
@@ -36,14 +36,14 @@ namespace z80 {
      * @brief Копирующий конструктор копирует из исходного объекта ссылку на автомат.
      * @param s Ссылка на объект на основе которого создаётся новый объект state.
      */
-    state (const z80::state<inputActionType>& s) = default;
+    // state (const z80::state<inputActionType>& s) = default;
 
     /**
      * @brief Клонирование объекта state. Это требуется при копировании машин для передачи в новую машину текущего состояния.
      * @param s Машина к которой привязывается вновь создаваемый объект.
      * @return
      */
-    virtual std::unique_ptr<z80::state<inputActionType>> clone(StateMachine& s) const = 0;
+    // virtual std::unique_ptr<z80::state<inputActionType>> clone(StateMachine& s) const = 0;
 
     /**
      * @brief Деструктор полиморфного класса по-умолчанию.
@@ -61,6 +61,10 @@ namespace z80 {
      */
     virtual void finish() = 0;
 
+    /**
+     * @brief Указать состоянию указатель на новый автомат, в контексте которого теперь будет работать состояние.
+     * @param sMachine
+     */
     virtual void setStateMachine(z80::stateMachine<inputActionType>* sMachine) {
       sm = sMachine;
     }

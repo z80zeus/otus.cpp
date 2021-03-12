@@ -31,6 +31,11 @@ namespace z80 {
   public:
     stateMachine() = default;
 
+    /**
+     * @brief Перемещающий конструктор перемещеает из автомата-источника к себе его текущее состояние и указывает этому
+     * состоянию свой адрес в качестве адреса его нового автомата.
+     * @param sm Автомат-источник.
+     */
     stateMachine(z80::stateMachine<inputActionType>&& sm) noexcept : currentState(std::move(sm.currentState)) {
       currentState->setStateMachine(this);
     }
@@ -56,7 +61,8 @@ namespace z80 {
     /**
      * @brief Входное воздействие на автомат.
      * @param command Ссылка на объект воздействия.
-     * @details Автомат не содержит логики своей работы, поэтому делегирует обработку воздействия текущему объекту-состоянию.
+     * @details Автомат не содержит логики своей работы: вся логика находится в классах-состояниях автомата.
+     * Поэтому автомат делегирует обработку воздействия текущему объекту-состоянию.
      */
     void
     inputAction(const inputActionType& command) {
@@ -69,11 +75,11 @@ namespace z80 {
     * @param sm Автомат, состояние которого копируется в текущий.
     * @return Ссылка на текущий объект.
     */
-    z80::stateMachine<inputActionType>&
-    operator= (const z80::stateMachine<inputActionType>& sm) {
-      currentState = sm.currentState->clone(*this);
-      return *this;
-    };
+//    z80::stateMachine<inputActionType>&
+//    operator= (const z80::stateMachine<inputActionType>& sm) {
+//      currentState = sm.currentState->clone(*this);
+//      return *this;
+//    };
 
   protected:
     /**

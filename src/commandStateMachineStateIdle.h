@@ -22,12 +22,12 @@ namespace z80 {
 
   public:
     /**
-     * @brief Конструкту состояния передаётся ссылка на автомат, в контексте которого это состояние работают.
-     * @param stateMachine Ссылка на объект-автомат.
+     * @brief Конструкту состояния передаётся указатель на автомат, в контексте которого это состояние работает.
+     * @param sm Указатель на объект-автомат.
      */
-    explicit commandStateMachineStateIdle(commandStateMachine* stateMachine);
+    explicit commandStateMachineStateIdle(StateMachine* sm);
 
-    commandStateMachineStateIdle(const commandStateMachineStateIdle& sms);
+//    commandStateMachineStateIdle(const commandStateMachineStateIdle& sms);
 
     /**
      * @brief Входное воздействие на автомат.
@@ -37,17 +37,17 @@ namespace z80 {
      */
     void inputAction(const std::string& iAction) override;
 
-    std::unique_ptr<z80::state<std::string>> clone(StateMachine& s) const override;
+ //   std::unique_ptr<z80::state<std::string>> clone(StateMachine& s) const override;
 
   private:
     /**
-     * @brief Переключить машину в состояние StaticBLock. Это - служебная функция, вызываемая изнутри данного класса.
+     * @brief Переключить автомат в состояние StaticBLock. Это - служебная функция, вызываемая изнутри данного класса.
      * @details Вызывается по приходу любой команды, кроме команд начала/конца динамического блока: "{" / "}".
      */
     void switchStateMachineToStaticBlock(const std::string& iAction) const;
 
     /**
-     * @brief Переключить машину в состояние DynamicBLock. Это - служебная функция, вызываемая изнутри данного класса.
+     * @brief Переключить автомат в состояние DynamicBLock. Это - служебная функция, вызываемая изнутри данного класса.
      * @details Вызывается по приходу команды начала динамического блока: "{".
      */
     void switchStateMachineToDynamicBlock() const;

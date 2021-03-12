@@ -77,7 +77,7 @@ main(int argc, char* argv[]) {
     if (argc > 1)
       commandBlockSize = getStaticBlockSizeFromArgv(argv[1]);
 
-    string data {"1\n2\n3\n\4\n5\n6\n"};
+    string data {"1\n2\n3\n4\n5\n6\n"};
 
     handle_t commandMachineHandle = connect(commandBlockSize);
     receive(commandMachineHandle, data.c_str(), data.length());
