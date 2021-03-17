@@ -8,39 +8,24 @@ using namespace z80;
 using namespace std;
 
 commandStateMachine::commandStateMachine() :
-  stateMachine<string>(),
-  subscriber<string>(),
-  publisher<string>() {
+stateMachine<string>(),
+subscriber<string>(),
+publisher<string>() {
   setState(make_unique<commandStateMachineStateIdle>(this));
 }
 
 commandStateMachine::commandStateMachine(commandStateMachine&& csm) noexcept:
-  stateMachine<string>(std::forward<commandStateMachine>(csm)),
-  subscriber<string>(),
-  publisher<string>(std::forward<commandStateMachine>(csm)),
-  staticBlockSize(csm.staticBlockSize) {
+stateMachine<string>(std::forward<commandStateMachine>(csm)),
+subscriber<string>(),
+publisher<string>(std::forward<commandStateMachine>(csm)),
+staticBlockSize(csm.staticBlockSize) {
+  dynamic_cast<commandStateMachineState*>(currentState.get())->setCStateMachine(this);
 }
-
-commandStateMachine&
-commandStateMachine::operator=(const commandStateMachine& csm) {
-  return *this;
-};
-//{
-//  stateMachine<string>::operator=(csm);
-//  staticBlockSize = csm.staticBlockSize;
-//  return *this;
-//}
 
 void
 commandStateMachine::update(const string& command) {
   inputAction(command);
 }
-
-//void
-//commandStateMachine::unsubscribed() {
-//  if (currentState)
-//    currentState->finish();
-//}
 
 void
 commandStateMachine::setStaticBlockSize(size_t blockSize) {

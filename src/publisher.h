@@ -22,11 +22,19 @@ namespace z80 {
     using Subscriber = z80::subscriber<T>;
 
   public:
+    /**
+     * @brief Конструктору по-умолчанию достаточно реализации по-умолчанию.
+     */
     publisher() = default;
-    publisher(z80::publisher<T>&& p): subscribers(std::move(p.subscribers)) {};
 
     /**
-     * @brief Деструктор полиморфного класса. Реализацию по-умолчанию.
+     * @brief Перемещающий конструктор забирает себе во владение всех подписчиков объекта-источника.
+     * @param p Объект-источник, на основе которого конструируется новый объект.
+     */
+    publisher(z80::publisher<T>&& p) noexcept : subscribers(std::move(p.subscribers)) {}
+
+    /**
+     * @brief Деструктор полиморфного класса. Достаточно реализации по-умолчанию.
      */
     virtual ~publisher() = default;
 
@@ -40,7 +48,8 @@ namespace z80 {
 
     /**
      * @brief Функция отписки всех подписчиков. Функция индивидуальной отписки в данном проекте не требуется.
-     * @details У каждого подписчика вызывает метод unsubscribed(), оповещая его об окончании действия подписки.
+     * @details У каждого подписчика вызывает метод unsubscribed(), оповещая его об окончании действия подписки и
+     * очищает контейнер подписчиков.
      */
     virtual void unsubscribeAll() {
       for (const auto& subscriber : subscribers)

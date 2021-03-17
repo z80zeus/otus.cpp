@@ -4,9 +4,11 @@ cmake_minimum_required(VERSION 3.2)
 project(bulk VERSION 0.0.$ENV{TRAVIS_BUILD_NUMBER})
 
 # config с++
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_BUILD_TYPE Debug)
+
+find_package(Threads REQUIRED)
 
 configure_file(src/version.h.in version.h)
 
@@ -28,40 +30,40 @@ set_target_properties(publisherCommandsFromStream commandStateMachine
         commandBlockFiler
         PROPERTIES
         POSITION_INDEPENDENT_CODE True)
-add_library(libInterface SHARED src/libInterface.cpp)
-target_link_libraries(libInterface libversion publisherCommandsFromStream commandStateMachine commandStateMachineState
+add_library(async SHARED src/libInterface.cpp)
+target_link_libraries(async libversion publisherCommandsFromStream commandStateMachine commandStateMachineState
         commandStateMachineStateIdle commandStateMachineStateStaticBlock commandStateMachineStateDynamicBlock
-        commandBlockPrinter commandBlockFiler)
+        commandBlockPrinter commandBlockFiler Threads::Threads)
 
 add_executable(bulk main.cpp)
 target_include_directories(bulk PRIVATE "${PROJECT_SOURCE_DIR}/src")
-target_link_libraries(bulk libInterface)
+target_link_libraries(bulk async)
 
-## Boost test
-#find_package(Boost COMPONENTS unit_test_framework REQUIRED)
-#
-## Test libversion
-#add_executable(test_libversion test/test_libversion.cpp)
-#target_link_libraries(test_libversion ${Boost_LIBRARIES} libversion)
-#set_target_properties(test_libversion PROPERTIES COMPILE_DEFINITIONS BOOST_TEST_DYN_LINK INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR})
-#
-#add_executable(test_pcfs test/test_publisherCommandsFromStream.cpp)
-#target_link_libraries(test_pcfs ${Boost_LIBRARIES} publisherCommandsFromStream commandBlockPrinter commandBlockFiler)
-#set_target_properties(test_pcfs PROPERTIES COMPILE_DEFINITIONS BOOST_TEST_DYN_LINK INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR})
-#
-#enable_testing()
-#add_test(test_version test_libversion)
-#add_test(test_version test_pcfs)
-#
-## doxygen
-#find_package(Doxygen REQUIRED dot)
-#set(DOXYGEN_PROJECT_BRIEF ${PROJECT_NAME})
-#set(DOXYGEN_HAVE_DOT YES)
-#set(DOXYGEN_EXTRACT_ALL YES)
-#set(DOXYGEN_OUTPUT_DIRECTORY docs)
-#doxygen_add_docs(doxygen src ALL)
+# Boost test
+find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 
-## compiler specific options
+# Test libversion
+add_executable(test_libversion test/test_libversion.cpp)
+target_link_libraries(test_libversion ${Boost_LIBRARIES} libversion)
+set_target_properties(test_libversion PROPERTIES COMPILE_DEFINITIONS BOOST_TEST_DYN_LINK INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR})
+
+add_executable(test_pcfs test/test_publisherCommandsFromStream.cpp)
+target_link_libraries(test_pcfs ${Boost_LIBRARIES} publisherCommandsFromStream commandBlockPrinter commandBlockFiler)
+set_target_properties(test_pcfs PROPERTIES COMPILE_DEFINITIONS BOOST_TEST_DYN_LINK INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIR})
+
+enable_testing()
+add_test(test_version test_libversion)
+add_test(test_version test_pcfs)
+
+# doxygen
+find_package(Doxygen REQUIRED dot)
+set(DOXYGEN_PROJECT_BRIEF ${PROJECT_NAME})
+set(DOXYGEN_HAVE_DOT YES)
+set(DOXYGEN_EXTRACT_ALL YES)
+set(DOXYGEN_OUTPUT_DIRECTORY docs)
+doxygen_add_docs(doxygen src ALL)
+
+# compiler specific options
 #if (MSVC)
 #    target_compile_options(bulk PRIVATE /W4)
 #    target_compile_options(libversion PRIVATE /W4)
@@ -74,6 +76,7 @@ target_link_libraries(bulk libInterface)
 
 # which are to install
 install(TARGETS bulk RUNTIME DESTINATION bin)
+install(TARGETS async RUNTIME DESTINATION lib)
 
 # package config
 set(CPACK_GENERATOR DEB)

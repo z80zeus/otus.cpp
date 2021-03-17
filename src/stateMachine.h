@@ -1,5 +1,5 @@
 /**
- * @brief Файл содержит объявление шаблонного класса "Конечный автомат" (stateMachine).
+ * @brief Файл содержит описание шаблонного класса "Конечный автомат" (stateMachine), обрабатывающего входные воздействия.
  * @author Владимир Лазарев solock@mail.ru
  */
 
@@ -17,7 +17,7 @@ namespace z80 {
 
   /**
    * @brief Базовый класс содержащий реализацию алгоритма работы конечного автомата.
-   * @tparam inputActionType Тип данных, с которым работает алгоритм.
+   * @tparam inputActionType Тип данных, с которым работает алгоритм. Данные этого типа поступают на вход автомату.
    * @details Данный класс не реализует никакого конкретного алгоритма. Он содержит базовый функционал работы конечного
    * автомата:
    * 1. Хранит текущее состояние.
@@ -27,6 +27,7 @@ namespace z80 {
   template<typename inputActionType>
   class stateMachine {
     using State = z80::state<inputActionType>;
+    using StateMachine = z80::stateMachine<inputActionType>;
 
   public:
     stateMachine() = default;
@@ -36,15 +37,22 @@ namespace z80 {
      * состоянию свой адрес в качестве адреса его нового автомата.
      * @param sm Автомат-источник.
      */
-    stateMachine(z80::stateMachine<inputActionType>&& sm) noexcept : currentState(std::move(sm.currentState)) {
+    stateMachine(StateMachine&& sm) noexcept : currentState(std::move(sm.currentState)) {
       currentState->setStateMachine(this);
     }
 
     /**
-     * @brief Виртуальный деструктор делает класс полиморфным. Это нужно для приведения ссылок и указателей на этот класс
-     * вверх по иерархии.
+     * @brief Деструктор даёт текущему состоянию автомата команду завершения работы.
      */
     virtual ~stateMachine() {
+      if (currentState)
+        currentState->finish();
+    };
+
+    /**
+     * @brief Останов автомата. Команда передаётся текущему состоянию автомата.
+     */
+    virtual void stop() {
       if (currentState)
         currentState->finish();
     };
@@ -69,17 +77,6 @@ namespace z80 {
       if (currentState)
         currentState->inputAction(command);
     };
-
-    /**
-    * @brief Оператор присваивания.
-    * @param sm Автомат, состояние которого копируется в текущий.
-    * @return Ссылка на текущий объект.
-    */
-//    z80::stateMachine<inputActionType>&
-//    operator= (const z80::stateMachine<inputActionType>& sm) {
-//      currentState = sm.currentState->clone(*this);
-//      return *this;
-//    };
 
   protected:
     /**

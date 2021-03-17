@@ -1,5 +1,5 @@
 /**
- * @brief Файл содержит объявление класса - состояния "Холостой ход" для конечного автомата.
+ * @brief Файл содержит объявление класса - состояния "Холостой ход" для конечного автомата z80::commandStateMachine.
  * @author Владимир Лазарев solock@mail.ru
  */
 
@@ -9,25 +9,21 @@
 #include "state.h"
 #include "stateMachine.h"
 
-#include <memory> // std::shared_ptr
 #include <string> // std::string
 
 namespace z80 {
   /**
    * @brief Класс состояния автомата "Холостой ход" предназначен для работы с автоматом, обрабатывающим строковые
-   * команды и наследуется от общего класса состояний автомата данного вида - z80::commandStateMachineState.
+   * команды (z80::commandStateMachine) и наследуется от общего класса состояний автомата данного вида -
+   * z80::commandStateMachineState.
    */
   class commandStateMachineStateIdle : public z80::commandStateMachineState {
-    using StateMachine = z80::stateMachine<std::string>;
-
   public:
     /**
-     * @brief Конструкту состояния передаётся указатель на автомат, в контексте которого это состояние работает.
+     * @brief Конструктору состояния передаётся указатель на автомат, в контексте которого это состояние работает.
      * @param sm Указатель на объект-автомат.
      */
-    explicit commandStateMachineStateIdle(StateMachine* sm);
-
-//    commandStateMachineStateIdle(const commandStateMachineStateIdle& sms);
+    explicit commandStateMachineStateIdle(z80::commandStateMachine* sm);
 
     /**
      * @brief Входное воздействие на автомат.
@@ -36,8 +32,6 @@ namespace z80 {
      * (команды).
      */
     void inputAction(const std::string& iAction) override;
-
- //   std::unique_ptr<z80::state<std::string>> clone(StateMachine& s) const override;
 
   private:
     /**

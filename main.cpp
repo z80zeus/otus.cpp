@@ -1,4 +1,4 @@
- /**
+/**
  * @brief Самостоятельная работа otus.c++.8: Асинхронное многопоточное программирование.
  * @author Владимир Лазарев solock@mail.ru
  * @details
@@ -32,7 +32,7 @@
  * 3. вызывается disconnect() с передачей контекста. Вызов разрушает контекст полностью. С точки зрения логики
  *    обработки команд этот вызов считается завершением текущего блока команд.
  *
- * Необходимо реализовать эти функции так, чтобы сохранить прежнюю функционально проекта.
+ * Необходимо реализовать эти функции так, чтобы сохранить прежнюю функциональность проекта.
  * Реализация должна допускать множественные вызовы connect().
  * Вызовы receive() с разными контекстами не должны мешать друг другу.
  * Вызовы могут осуществляться из разных потоков, однако вызовы с одинаковым контекстом всегда выполняются из одного
@@ -58,7 +58,8 @@
 #include <iostream>   // std::cout, std::cin
 #include <stdexcept>  // std::invalid_argument, std::out_of_range
 #include <string>     // std::stoul
-
+#include <thread>     // std::thread
+#include <utility>    // std::move
 
 using namespace std;
 using namespace async;
@@ -66,9 +67,31 @@ using namespace async;
 /**
  * @brief Преобразование строки в положительное число.
  * @param param Строка для преобразования
- * @return Число, соответствующее строке.
+ * @return Число, соответствующее переданной строке.
  */
-size_t getStaticBlockSizeFromArgv(const string& param);
+size_t
+getStaticBlockSizeFromArgv(const string& param) {
+  if (!all_of(cbegin(param), cend(param), [](auto sym) { return isdigit(sym); }))
+    throw invalid_argument("Not integer positive decimal number");
+  try {
+    return std::stoul(param, nullptr, 10);
+  }
+  catch (const out_of_range&) {
+    throw out_of_range("Number too large");
+  }
+}
+
+/**
+ * @brief Функция, тестирующая работу библиотеки.
+ * @param data Данные, которые следует передать библиотеке.
+ * @param commandBlockSize Размер статического блока команд.
+ */
+void
+testFunction(string&& data, size_t commandBlockSize) {
+   handle_t commandMachineHandle = connect(commandBlockSize);
+   receive(commandMachineHandle, data.c_str(), data.length());
+   disconnect(commandMachineHandle);
+}
 
 int
 main(int argc, char* argv[]) {
@@ -77,26 +100,17 @@ main(int argc, char* argv[]) {
     if (argc > 1)
       commandBlockSize = getStaticBlockSizeFromArgv(argv[1]);
 
-    string data {"1\n2\n3\n4\n5\n6\n"};
+    string data1 {"1\n2\n3\n4\n5\n6\n7\n"};
+    string data2 {"7\n8\n{\n9\nA\nB\nC\nD\nE\nF\n}\nH\n"};
 
-    handle_t commandMachineHandle = connect(commandBlockSize);
-    receive(commandMachineHandle, data.c_str(), data.length());
-    disconnect(commandMachineHandle);
+    thread  t1 ([commandBlockSize, &data1] () { return testFunction(move(data1), commandBlockSize); });
+    thread  t2 ([commandBlockSize, &data2] () { return testFunction(move(data2), commandBlockSize); });
+
+    t1.join();
+    t2.join();
   }
   catch (const exception& e) {
     cerr << e.what() << endl;
   }
   return 0;
-}
-
-size_t
-getStaticBlockSizeFromArgv(const string& param) {
-  if (!all_of(cbegin(param), cend(param), [](auto sym) { return isdigit(sym); }))
-    throw invalid_argument("Not number");
-  try {
-    return std::stoul(param, nullptr, 10);
-  }
-  catch (const out_of_range&) {
-    throw out_of_range("Number too large");
-  }
 }

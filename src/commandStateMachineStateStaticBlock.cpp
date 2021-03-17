@@ -3,20 +3,21 @@
 #include "commandStateMachineStateIdle.h"
 #include "commandStateMachineStateStaticBlock.h"
 
+#include <memory> // std::make_unique
+
 using namespace std;
 using namespace z80;
 
-commandStateMachineStateStaticBlock::commandStateMachineStateStaticBlock(StateMachine* sm, const string& iAction):
-    commandStateMachineState(sm),
-    blockSize { dynamic_cast<commandStateMachine*>(sm)->getStaticBlockSize() } {
+commandStateMachineStateStaticBlock::commandStateMachineStateStaticBlock(commandStateMachine* sm, const string& iAction):
+commandStateMachineState(sm),
+blockSize { sm->getStaticBlockSize() } {
   inputAction_(iAction);
 }
-
-// commandStateMachineStateStaticBlock::commandStateMachineStateStaticBlock(const commandStateMachineStateStaticBlock& sms) = default;
 
 void
 commandStateMachineStateStaticBlock::finish() {
   if (commandsCount) sendSavedCommands();
+  commandsCount = 0;
 }
 
 void
@@ -44,15 +45,10 @@ commandStateMachineStateStaticBlock::inputAction_(const std::string& iAction) {
 
 void
 commandStateMachineStateStaticBlock::switchStateMachineToIdle() const {
-  sm->setState(make_unique<commandStateMachineStateIdle>(sm));
+  sm->setState(make_unique<commandStateMachineStateIdle>(csm));
 }
 
 void
 commandStateMachineStateStaticBlock::switchStateMachineToDynamicBlock() const {
-  sm->setState(make_unique<commandStateMachineStateDynamicBlock>(sm));
+  sm->setState(make_unique<commandStateMachineStateDynamicBlock>(csm));
 }
-
-//unique_ptr<state<string>>
-//commandStateMachineStateStaticBlock::clone(StateMachine &s) const {
-//  return make_unique<commandStateMachineStateStaticBlock>(*this);
-//}

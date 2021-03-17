@@ -6,6 +6,7 @@
 
 #include "subscriber.h"
 
+#include <iostream> // std::cout
 #include <ostream>  // std::ostream
 #include <string>   // std::string
 
@@ -23,15 +24,15 @@ namespace z80 {
      * создаваемый объект.
      * @param outputStream Ссылка на объект, реализующий функциональность стандартного потокового вывода.
      */
-    commandBlockPrinter(std::ostream& outputStream);
+    explicit commandBlockPrinter(std::ostream& outputStream = std::cout);
 
     /**
      * @brief Функция выводит блок команд в поток, указанный в конструкторе.
-     * @param commandBlock Блок команд, который следует вывести в файл.
-     * @details В commandBlock, помимо самих команд, в самом начале строки находится служебная информация:
-     * время открытия данного блока команд в формате unixtime (число секунд прошедших с 1 января 1970 года).
-     * <unixtime> <commands>.
-     * Данная функция игнорирует эту служебную информацию и выводит в поток только команды (<commands>).
+     * @param commandBlock Блок команд, который следует вывести в поток.
+     * @details В commandBlock, помимо самих команд, в самом начале строки находится служебная информация - уникальный
+     * идентификатор блока команд: <ID> <commands>
+     * Данная функция игнорирует эту служебную информацию и выводит в поток только команды (<commands>), предваряя их
+     * кодовым словом bulk.
      */
     void update(const std::string& commandBlock) override;
 

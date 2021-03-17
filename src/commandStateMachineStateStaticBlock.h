@@ -1,5 +1,6 @@
 /**
- * @brief Файл содержит объявление класса - состояния "Обработка статического блока команд" для конечного автомата.
+ * @brief Файл содержит объявление класса - состояния "Обработка статического блока команд" для конечного автомата
+ * z80::commandStateMachine.
  * @author Владимир Лазарев solock@mail.ru
  */
 
@@ -10,27 +11,23 @@
 #include "state.h"
 #include "stateMachine.h"
 
-#include <memory> // std::shared_ptr
 #include <string> // std::string
 
 namespace z80 {
   /**
    * @brief Класс состояния автомата "Обработка статического блока команд" предназначен для работы с автоматом,
-   * обрабатывающим строковые команды и наследуется от общего класса состояний автомата данного вида -
-   * z80::commandStateMachineState.
+   * обрабатывающим строковые команды (z80::commandStateMachine) и наследуется от общего класса состояний автомата
+   * данного вида - z80::commandStateMachineState.
    */
   class commandStateMachineStateStaticBlock : public z80::commandStateMachineState {
-    using StateMachine = stateMachine<std::string>;
-
   public:
     /**
      * @brief Конструкту состояния передаётся ссылка на автомат, в контексте которого это состояние работают.
      * @param sm Указатель на объект-автомат.
      * @param iAction Начальное входное воздействие на автомат, которое привело к переключению в данное состояние.
+     * Его объект запоминает, как первую команду блока.
      */
-    commandStateMachineStateStaticBlock(StateMachine* sm, const std::string& iAction);
-
-//    commandStateMachineStateStaticBlock(const commandStateMachineStateStaticBlock& sms);
+    commandStateMachineStateStaticBlock(z80::commandStateMachine* sm, const std::string& iAction);
 
     /**
      * @brief Входное воздействие на автомат.
@@ -40,7 +37,6 @@ namespace z80 {
      */
     void inputAction(const std::string& iAction) override;
 
-
     /**
      * @brief Вызов данного метода является сигналом о том, что автомат заканчивает работу и объекту нужно завершить
      * свой алгоритм.
@@ -48,8 +44,6 @@ namespace z80 {
      * блок команд.
      */
     void finish() override;
-
-//    std::unique_ptr<z80::state<std::string>> clone(StateMachine& s) const override;
 
   private:
     /**
@@ -67,8 +61,8 @@ namespace z80 {
     void switchStateMachineToIdle() const;
 
     /**
-     * @brief Переключить машину в состояние "Обработка холостого хода". Это - служебная функция, вызываемая изнутри
-     * данного класса.
+     * @brief Переключить машину в состояние "Обработка динамического блока". Это - служебная функция, вызываемая
+     * изнутри данного класса.
      */
     void switchStateMachineToDynamicBlock() const;
 
@@ -78,7 +72,8 @@ namespace z80 {
     std::size_t commandsCount = 0;
 
     /**
-     * @brief Размер блока (в штуках команд) по достижении которого он закрывается и автомат переходит в состояние Idle.
+     * @brief Размер блока (в штуках команд) по достижении которого он закрывается и передаётся автомату для отсылки
+     * подписчикам. После этого производится переключение автомата в состояние Idle.
      */
     std::size_t blockSize = 3;
   };

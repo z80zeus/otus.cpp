@@ -1,24 +1,26 @@
 #include "commandStateMachineState.h"
-#include "publisher.h"
 
 using namespace z80;
 using namespace std;
 
-using Publisher = publisher<string>;
+atomic<size_t>
+commandStateMachineState::countPostfix = 0;
 
-commandStateMachineState::commandStateMachineState(StateMachine* sm) :
+commandStateMachineState::commandStateMachineState(commandStateMachine* sm) :
 state<string>(sm),
-//cStateMachine(csm),
-blockStartTime(time(nullptr)) {}
+csm(sm),
+blockStartTime(time(nullptr)),
+startTimePostfix{++countPostfix} {
+}
 
-//commandStateMachineState::commandStateMachineState(const commandStateMachineState& csms):
-//state<string>(csms.sm),
-//cStateMachine(csms.cStateMachine),
-//blockStartTime(csms.blockStartTime) {};
+void
+commandStateMachineState::setCStateMachine(z80::commandStateMachine* cStateMachine) {
+  csm = cStateMachine;
+}
 
 void
 commandStateMachineState::sendSavedCommands() {
-  dynamic_cast<Publisher*>(sm)->notify(to_string(blockStartTime) + " " + savedCommands);
+  csm->notify(to_string(blockStartTime) + "." + to_string(startTimePostfix) + " " + savedCommands);
   savedCommands = "";
 }
 

@@ -3,15 +3,15 @@
 #include "commandStateMachineStateIdle.h"
 #include "commandStateMachine.h"
 
+#include <memory> // std::make_unique
+
 using namespace z80;
 using namespace std;
 
-commandStateMachineStateDynamicBlock::commandStateMachineStateDynamicBlock(StateMachine* sm):
+commandStateMachineStateDynamicBlock::commandStateMachineStateDynamicBlock(commandStateMachine* sm):
   commandStateMachineState(sm),
   nestingLevel(1) {
 }
-
-//commandStateMachineStateDynamicBlock::commandStateMachineStateDynamicBlock(const commandStateMachineStateDynamicBlock& sms) = default;
 
 void
 commandStateMachineStateDynamicBlock::inputAction(const string& iAction) {
@@ -36,10 +36,5 @@ commandStateMachineStateDynamicBlock::inputAction(const string& iAction) {
 
 void
 commandStateMachineStateDynamicBlock::switchStateMachineToIdle() const {
-  sm->setState(make_unique<commandStateMachineStateIdle>(sm));
+  sm->setState(make_unique<commandStateMachineStateIdle>(csm));
 }
-
-//unique_ptr<state<string>>
-//commandStateMachineStateDynamicBlock::clone(StateMachine& s) const {
-//  return make_unique<commandStateMachineStateDynamicBlock>(*this);
-//}

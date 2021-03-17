@@ -2,16 +2,15 @@
 #include "commandStateMachineStateIdle.h"
 #include "commandStateMachineStateStaticBlock.h"
 
+#include <memory>     // std::make_unique
 #include <stdexcept>  // std::invalid_argument exception
 
 using namespace std;
 using namespace z80;
 
-commandStateMachineStateIdle::commandStateMachineStateIdle(StateMachine* sm) :
-    commandStateMachineState(sm) {
+commandStateMachineStateIdle::commandStateMachineStateIdle(commandStateMachine* sm) :
+commandStateMachineState(sm) {
 }
-
-// commandStateMachineStateIdle::commandStateMachineStateIdle(const commandStateMachineStateIdle& sms) = default;
 
 void
 commandStateMachineStateIdle::inputAction(const string& iAction) {
@@ -27,15 +26,10 @@ commandStateMachineStateIdle::inputAction(const string& iAction) {
 
 void
 commandStateMachineStateIdle::switchStateMachineToDynamicBlock() const {
-  sm->setState(make_unique<commandStateMachineStateDynamicBlock>(sm));
+  sm->setState(make_unique<commandStateMachineStateDynamicBlock>(csm));
 }
 
 void
 commandStateMachineStateIdle::switchStateMachineToStaticBlock(const string& iAction) const {
-  sm->setState(make_unique<commandStateMachineStateStaticBlock>(sm, iAction));
+  sm->setState(make_unique<commandStateMachineStateStaticBlock>(csm, iAction));
 }
-
-//unique_ptr<state<string>>
-//commandStateMachineStateIdle::clone(StateMachine &s) const {
-//  return make_unique<commandStateMachineStateIdle>(*this);
-//}
