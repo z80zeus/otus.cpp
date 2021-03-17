@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.2)
 
 # project properties
-project(bulk VERSION 0.0.$ENV{TRAVIS_BUILD_NUMBER})
+project(async VERSION 0.0.$ENV{TRAVIS_BUILD_NUMBER})
 
 # config с++
 set(CMAKE_CXX_STANDARD 20)
